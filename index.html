@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<link rel="icon" href="data:,">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dolanan AR – Game Aji Saka</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Baloo+2:wght@600;800&display=swap">
+<style>
+@font-face{font-family:JV;src:url(fonts/jv.woff2) format('woff2');font-display:block}
+@font-face{font-family:AksaraJawa;src:url(fonts/aksara700.woff2) format('woff2');font-weight:700;font-display:block}
+:root{
+  --paper:#FAF7F0;--ink:#263743;--navy:#365D85;--green:#32715C;--sky:#9CD3E1;--gold:#F5D675;
+  --peach:#EDB5A3;--lilac:#C7B4DF;--brick:#A64F3C;
+  --display:'Baloo 2',ui-rounded,'Trebuchet MS',system-ui,sans-serif;
+  --body:'Andika','Trebuchet MS',system-ui,sans-serif;
+  --aksara:AksaraJawa,JV,'Noto Sans Javanese',serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#16222b;font-family:var(--body);color:var(--ink);overflow:hidden}
+body{display:grid;place-items:center}
+#stage{position:relative;width:min(100vw,177.78vh);height:min(56.25vw,100vh);container-type:size;background:#263743;overflow:hidden;user-select:none;-webkit-user-select:none;touch-action:none}
+#cv{position:absolute;inset:0;width:100%;height:100%;display:block}
+#vid{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+#ui{position:absolute;inset:0;pointer-events:none}
+.scr{position:absolute;inset:0;display:none}
+.scr.on{display:block}
+.card{position:absolute;background:var(--paper);border-radius:2.4cqw;box-shadow:0 1cqw 3cqw rgba(0,0,0,.3);padding:2.4cqw 3cqw;text-align:center;display:grid;gap:1.6cqw;justify-items:center;align-content:center}
+.chip{display:inline-block;background:var(--navy);color:#fff;font:800 1.7cqw/1 var(--display);padding:.6cqw 1.5cqw .8cqw;border-radius:99px;letter-spacing:.06em}
+h1,h2,h3,p{margin:0}
+h1{font:800 6.4cqw/1 var(--display);color:var(--ink)}
+h2{font:800 4.4cqw/1.05 var(--display);color:var(--ink)}
+h3{font:800 3cqw/1.1 var(--display);color:var(--navy)}
+.lead{font:700 2.1cqw/1.35 var(--body);max-width:44cqw}
+.small{font:400 1.6cqw/1.35 var(--body);color:#52646f;max-width:46cqw}
+/* tombol tahan (hand-press = tahan lama) */
+.hbtn,.btn{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:1cqw;cursor:pointer;border:.4cqw solid var(--ink);border-radius:99px;box-shadow:0 .6cqw 0 var(--ink);font:800 3cqw/1 var(--display);padding:1.1cqw 3cqw 1.3cqw;color:var(--ink);background:linear-gradient(90deg,var(--gold) calc(var(--p,0)*100%),#fff7dc calc(var(--p,0)*100%));pointer-events:auto;overflow:hidden;white-space:nowrap}
+.btn{background:#fff7dc}
+.hbtn.sm{font-size:2cqw;padding:.7cqw 1.8cqw .9cqw;border-width:.3cqw;box-shadow:0 .4cqw 0 var(--ink)}
+.hbtn.ghost{background:linear-gradient(90deg,var(--sky) calc(var(--p,0)*100%),#fff calc(var(--p,0)*100%))}
+.hbtn svg{width:2.6cqw;height:2.6cqw}
+.hbtn:active,.btn:active{transform:translateY(.4cqw);box-shadow:0 .2cqw 0 var(--ink)}
+.hint{font:700 1.5cqw/1 var(--body);color:#52646f}
+.dim{opacity:.0;pointer-events:none}
+/* layar mulai */
+#sStart .card{left:50%;top:50%;transform:translate(-50%,-50%);width:62cqw;padding:3.4cqw 4cqw}
+#sStart h1 em{font-style:normal;color:var(--brick)}
+.row{display:flex;gap:1.6cqw;flex-wrap:wrap;justify-content:center}
+#camMsg{font:700 1.8cqw/1.3 var(--body);color:var(--brick);min-height:2.4cqw}
+/* menu */
+#sMenu .title{position:absolute;left:0;right:0;top:3cqw;text-align:center}
+#sMenu .title h2{color:#fff;text-shadow:0 .3cqw 1cqw rgba(0,0,0,.5)}
+.gcards{position:absolute;left:5cqw;right:5cqw;top:11cqw;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1.8cqw}
+.gc{background:var(--paper);border-radius:2.2cqw;box-shadow:0 1cqw 2.6cqw rgba(0,0,0,.3);padding:1.3cqw;display:grid;gap:1cqw;justify-items:center;text-align:center;pointer-events:none}
+.gc .art{height:15cqw;width:100%;position:relative}
+.gc .art img{position:absolute;inset:0;margin:auto;height:100%;width:auto;max-width:100%;object-fit:contain}
+.gc .art .glyphs{position:absolute;inset:0;display:grid;place-items:center}
+.gc .glyphs{font:700 5cqw/1 var(--aksara);color:var(--brick);letter-spacing:.08em}
+.gc p{font:700 1.45cqw/1.3 var(--body);min-height:5.6cqw}
+.gc h3{margin:0;font-size:2.3cqw}
+.gc .hbtn{font-size:2.2cqw}
+#sMenu .bot{position:absolute;left:0;right:0;bottom:2.2cqw;display:flex;justify-content:center}
+/* intro */
+#sIntro .art{position:absolute;left:4cqw;bottom:0;height:70cqh;filter:drop-shadow(0 1cqw 2cqw rgba(0,0,0,.45))}
+#sIntro .art img{height:100%;width:auto;display:block}
+#sIntro .card{right:5cqw;top:7cqw;width:50cqw}
+/* win */
+#sWin .card{left:50%;top:50%;transform:translate(-50%,-50%);width:54cqw}
+/* HUD */
+#hud{position:absolute;left:1.6cqw;top:1.6cqw;display:none}
+#hud.on{display:block}
+#hud2{position:absolute;left:1.6cqw;right:1.6cqw;bottom:1.6cqw;display:none;justify-content:space-between;align-items:flex-end;pointer-events:none}
+#hud2.on{display:flex}
+#hud2 .hbtn{visibility:hidden}
+#hud2 .hbtn.show{visibility:visible}
+/* subtitle */
+#cap{position:absolute;left:50%;bottom:4.2cqw;transform:translateX(-50%);max-width:62cqw;display:none;pointer-events:none;z-index:5}
+#cap.on{display:block}
+#cap .chipn{position:absolute;left:2cqw;top:-1.1cqw;background:var(--c,var(--navy));color:#fff;font:800 1.6cqw/1 var(--display);padding:.5cqw 1.4cqw .7cqw;border-radius:1.1cqw;z-index:2}
+#cap p{background:rgba(27,39,48,.93);border:.35cqw solid var(--c,var(--navy));color:#fff;border-radius:2cqw;padding:1.5cqw 2.6cqw;font:700 2.3cqw/1.35 var(--body);text-align:center}
+/* pause */
+#lost{position:absolute;inset:0;display:none;place-content:center;justify-items:center;gap:1.6cqw;text-align:center;background:rgba(22,34,43,.78);z-index:6;pointer-events:none}
+#lost.on{display:grid}
+#lost h2{color:var(--gold)}
+#lost p{font:700 2.4cqw/1.35 var(--body);color:#fff;max-width:44cqw}
+#lost .hand{font-size:8cqw;animation:wave 1.6s ease-in-out infinite}
+@keyframes wave{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}}
+/* kursor tangan */
+#cur{position:absolute;left:0;top:0;width:4.2cqw;height:4.2cqw;margin:-2.1cqw 0 0 -2.1cqw;border-radius:50%;border:.5cqw solid #fff;background:rgba(245,214,117,.75);box-shadow:0 0 0 .3cqw var(--ink),0 0 2cqw rgba(245,214,117,.9);pointer-events:none;display:none;z-index:9}
+#cur.on{display:block}
+/* pengaturan pendamping */
+#gear{position:absolute;right:1.4cqw;top:1.2cqw;width:4.4cqw;height:4.4cqw;border-radius:50%;border:.3cqw solid var(--ink);background:var(--paper);font-size:2.4cqw;cursor:pointer;pointer-events:auto;z-index:20;display:grid;place-items:center}
+#panel{position:absolute;right:1.4cqw;top:6.4cqw;width:32cqw;background:var(--paper);border-radius:1.8cqw;box-shadow:0 1cqw 3cqw rgba(0,0,0,.4);padding:1.8cqw 2cqw;display:none;gap:1.1cqw;z-index:21;pointer-events:auto;font:700 1.6cqw/1.3 var(--body)}
+#panel.on{display:grid}
+#panel h3{font-size:2.2cqw}
+#panel label{display:flex;justify-content:space-between;align-items:center;gap:1cqw}
+#panel select,#panel .btn{font:700 1.5cqw var(--body);padding:.5cqw 1cqw;border-radius:.8cqw;border:.2cqw solid var(--ink);background:#fff;box-shadow:none;min-height:36px}
+
+/* latihan */
+.pickboard{position:absolute;left:12cqw;right:12cqw;top:8cqw;bottom:8cqw;background:rgba(250,247,240,.94);border-radius:2.4cqw;padding:1.4cqw;box-shadow:0 1cqw 3cqw rgba(0,0,0,.3);border:.5cqw solid var(--gold)}
+.pickgrid{display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(4,1fr);gap:1cqw;height:100%}
+.pickgrid .hbtn{flex-direction:column;gap:0;padding:0;border-radius:1.6cqw;border-width:.3cqw;box-shadow:0 .4cqw 0 var(--ink);font:800 2cqw/1 var(--display);position:relative}
+.pickgrid .hbtn .g{font:700 4.6cqw/1.1 var(--aksara);color:var(--c)}
+.pickgrid .hbtn .n{font:800 1.7cqw/1 var(--display);color:var(--ink);margin-top:.1cqw}
+.pickgrid .hbtn .ok{position:absolute;right:.6cqw;top:.3cqw;font-size:1.8cqw;color:#B8762E}
+.pickbot{position:absolute;left:1.6cqw;bottom:1.6cqw}
+.learn{position:absolute;inset:6cqw 5cqw 4cqw 5cqw;background:rgba(250,247,240,.95);border-radius:2.6cqw;box-shadow:0 1cqw 3cqw rgba(0,0,0,.3);display:grid;grid-template-columns:34cqw 1fr;align-items:center;padding:2cqw 3cqw}
+.learn .lg{display:grid;justify-items:center;gap:.6cqw}
+.learn .lg .aksara{font:700 17cqw/1.1 var(--aksara);color:var(--brick)}
+.learn .lg b{font:800 5.4cqw/1 var(--display);color:var(--navy);text-transform:uppercase}
+.learn .lc{display:grid;justify-items:center;gap:1cqw;text-align:center}
+.pills{display:flex;gap:1cqw;justify-content:center}
+.pill{width:8.4cqw;height:10.4cqw;border-radius:1.8cqw;background:#fff;border:.35cqw solid #E8D989;display:grid;align-content:center;justify-items:center;opacity:0;transform:scale(.4);transition:transform .45s ease,opacity .3s}
+.pill.on{opacity:1;transform:scale(1)}
+.pill .g{font:700 4.8cqw/1.1 var(--aksara);color:#9a8a3a}
+.pill .r{font:800 1.7cqw/1 var(--display);color:#9a8a3a}
+.pill.me{border-color:var(--brick);background:#FFF7F3}
+.pill.me .g,.pill.me .r{color:var(--brick)}
+.lline{font:800 4cqw/1 var(--display);color:var(--ink);margin-top:1cqw}
+.lmean{font:800 2.4cqw/1.1 var(--display);color:var(--green)}
+.lpos{font:700 1.7cqw/1.3 var(--body);color:#52646f;max-width:40cqw}
+.bubglyph{font:700 10cqw/1.1 var(--aksara);color:var(--brick)}
+@media (prefers-reduced-motion:reduce){#lost .hand{animation:none}}
+</style>
+</head>
+<body>
+<div id="stage">
+  <canvas id="cv"></canvas>
+  <video id="vid" playsinline muted></video>
+
+  <div id="ui">
+    <!-- MULAI -->
+    <section class="scr on" id="sStart">
+      <div class="card">
+        <span class="chip">DOLANAN AR</span>
+        <h1>Legenda <em>Aji Saka</em></h1>
+        <p class="lead">Main dengan gerakan tangan! Kamera melihat telunjukmu, lalu kamu membantu Dora, Sembada, dan Aji Saka.</p>
+        <div class="row">
+          <button class="btn" id="bCam" type="button" style="font-size:2.6cqw">Nyalakan Kamera</button>
+          <button class="btn" id="bNoCam" type="button" style="font-size:2.6cqw;background:#fff">Coba tanpa kamera (mouse / sentuh)</button>
+        </div>
+        <p id="camMsg"></p>
+        <p class="small">Untuk pendamping: tombol di layar ini dan ikon ⚙ boleh diklik. Selama bermain, semua tombol anak ditekan dengan menahan telunjuk di atasnya.</p>
+      </div>
+    </section>
+    <!-- MENU -->
+    <section class="scr" id="sMenu">
+      <div class="title"><h2>Pilih Permainan</h2></div>
+      <div class="gcards">
+        <div class="gc"><div class="art"><img src="img/cut_dora.png" alt=""></div><h3>Labirin Dora</h3><p>Bantu Dora menemukan Sembada.</p><button class="hbtn" data-act="game:dora" type="button">Main</button></div>
+        <div class="gc"><div class="art"><img src="img/cut_aji.png" alt=""></div><h3>Labirin Aji Saka</h3><p>Bantu Aji Saka mencari mereka.</p><button class="hbtn" data-act="game:aji" type="button">Main</button></div>
+        <div class="gc"><div class="art"><div class="glyphs">ꦲꦤꦕ</div></div><h3>Ukir Aksara</h3><p>Kumpulkan bintang, tulis 20 aksara, ukir di batu.</p><button class="hbtn" data-act="game:aksara" type="button">Main</button></div>
+        <div class="gc"><div class="art"><div class="glyphs" style="color:#365D85">ꦫꦏ</div></div><h3>Latihan Aksara</h3><p>Pilih aksara, tulis, belajar, pecah gelembung, kuis.</p><button class="hbtn" data-act="game:latihan" type="button">Main</button></div>
+      </div>
+      <div class="bot"><button class="hbtn ghost" data-act="seq" type="button" style="font-size:2.3cqw">Main berurutan (cerita lengkap)</button></div>
+    </section>
+    <!-- PENGANTAR GAME -->
+    <section class="scr" id="sIntro">
+      <div class="art"><img id="inArt" src="img/cut_dora.png" alt=""></div>
+      <div class="card">
+        <span class="chip" id="inTag">GAME 1</span>
+        <h2 id="inTitle">Labirin Dora</h2>
+        <h3 id="inMission">Misi: Temukan Sembada!</h3>
+        <p class="lead" id="inSub"></p>
+        <div class="row"><button class="hbtn" data-act="begin" type="button" id="bBegin">Mulai Main <svg viewBox="0 0 24 24"><path d="M6 3 L21 12 L6 21Z" fill="currentColor"/></svg></button></div>
+        <span class="hint">Tahan telunjuk di tombol sebentar</span>
+      </div>
+    </section>
+    <!-- PILIH AKSARA (latihan) -->
+    <section class="scr" id="sPick">
+      <div class="title"><h2 style="position:absolute;left:0;right:0;top:2.2cqw;text-align:center;color:#fff;text-shadow:0 .3cqw 1cqw rgba(0,0,0,.5)">Pilih Aksara</h2></div>
+      <div class="pickboard"><div class="pickgrid" id="pickGrid"></div></div>
+      <div class="pickbot"><button class="hbtn ghost sm" data-act="menu" type="button">Kembali</button></div>
+    </section>
+    <!-- BELAJAR -->
+    <section class="scr" id="sLearn">
+      <div class="learn">
+        <div class="lg"><span class="aksara" id="lrnG">ꦲ</span><b id="lrnN">ha</b></div>
+        <div class="lc"><div class="pills" id="pills"></div><div class="lline" id="lrnLine"></div><div class="lmean" id="lrnMean"></div><div class="lpos" id="lrnPos"></div>
+          <button class="hbtn" data-act="learnnext" type="button" style="margin-top:1.4cqw">Lanjut</button></div>
+      </div>
+    </section>
+    <!-- PETUNJUK GELEMBUNG -->
+    <section class="scr" id="sBub">
+      <div class="card" style="left:50%;top:50%;transform:translate(-50%,-50%);width:52cqw">
+        <span class="chip">GELEMBUNG</span>
+        <h2>Pecah gelembung aksara <b id="bubN" style="color:var(--brick)">ha</b></h2>
+        <div class="bubglyph aksara" id="bubG">ꦲ</div>
+        <p class="lead">Sentuh gelembung yang ada aksara ini. Pakai dua tangan!</p>
+        <button class="hbtn" data-act="bubgo" type="button">Mulai</button>
+      </div>
+    </section>
+    <!-- SELESAI -->
+    <section class="scr" id="sWin">
+      <div class="card">
+        <span class="chip" id="wTag">SELESAI</span>
+        <h2 id="wTitle">Berhasil!</h2>
+        <p class="lead" id="wSub"></p>
+        <div class="row"><button class="hbtn" data-act="next" type="button" id="bNext">Lanjut</button><button class="hbtn ghost" data-act="again" type="button">Main lagi</button><button class="hbtn ghost" data-act="pick" type="button" id="bPick" style="display:none">Pilih aksara</button></div>
+      </div>
+    </section>
+
+    <div id="hud"><button class="hbtn sm ghost" data-act="menu" type="button">Menu</button></div>
+    <div id="hud2"><button class="hbtn sm ghost" data-act="listen" type="button" id="bListen">Dengar Lagi</button><button class="hbtn" data-act="lanjut" type="button" id="bLanjut">Lanjut</button></div>
+    <div id="cap"><span class="chipn" id="capN">Aji Saka</span><p id="capT"></p></div>
+    <div id="lost"><div class="hand">✋</div><h2>Angkat tanganmu ya</h2><p>Tunjukkan satu tangan di depan kamera. Permainan menunggu kamu.</p></div>
+  </div>
+  <div id="cur"></div>
+  <button id="gear" type="button" aria-label="Pengaturan pendamping">⚙</button>
+  <div id="panel">
+    <h3>Pengaturan pendamping</h3>
+    <label>Bantuan jalur<select id="optAssist"><option value="0">Biasa</option><option value="1" selected>Lebar</option><option value="2">Sangat lebar</option></select></label>
+    <label>Suara<select id="optSound"><option value="1" selected>Hidup</option><option value="0">Mati (hanya teks)</option></select></label>
+    <label>Kamera di latar<select id="optDim"><option value="0.45" selected>Redup</option><option value="0.15">Jelas</option><option value="0.7">Sangat redup</option></select></label>
+    <label>Ukir aksara<button class="btn" id="bReset" type="button">Mulai dari awal</button></label>
+    <p class="small" id="modeInfo"></p>
+  </div>
+</div>
+<script src="lib/hands.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

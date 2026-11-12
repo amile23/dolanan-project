@@ -1,0 +1,233 @@
+[
+ {
+  "key": "start",
+  "file": "g_start.mp3",
+  "dur": 5.58,
+  "text": "Kita akan menuliskannya satu per satu. Ayo, mulai dari aksara pertama!",
+  "label": "Mulai"
+ },
+ {
+  "key": "huruf_ha",
+  "file": "g_huruf_ha.mp3",
+  "dur": 3.59,
+  "text": "Bagus! Ini adalah aksara Ha. Dibaca “ha”.",
+  "label": "Aksara Ha berhasil"
+ },
+ {
+  "key": "huruf_na",
+  "file": "g_huruf_na.mp3",
+  "dur": 3.53,
+  "text": "Bagus! Ini adalah aksara Na. Dibaca “na”.",
+  "label": "Aksara Na berhasil"
+ },
+ {
+  "key": "huruf_ca",
+  "file": "g_huruf_ca.mp3",
+  "dur": 3.69,
+  "text": "Bagus! Ini adalah aksara Ca. Dibaca “ca”.",
+  "label": "Aksara Ca berhasil"
+ },
+ {
+  "key": "huruf_ra",
+  "file": "g_huruf_ra.mp3",
+  "dur": 3.59,
+  "text": "Bagus! Ini adalah aksara Ra. Dibaca “ra”.",
+  "label": "Aksara Ra berhasil"
+ },
+ {
+  "key": "huruf_ka",
+  "file": "g_huruf_ka.mp3",
+  "dur": 3.6,
+  "text": "Bagus! Ini adalah aksara Ka. Dibaca “ka”.",
+  "label": "Aksara Ka berhasil"
+ },
+ {
+  "key": "huruf_da",
+  "file": "g_huruf_da.mp3",
+  "dur": 3.61,
+  "text": "Bagus! Ini adalah aksara Da. Dibaca “da”.",
+  "label": "Aksara Da berhasil"
+ },
+ {
+  "key": "huruf_ta",
+  "file": "g_huruf_ta.mp3",
+  "dur": 3.65,
+  "text": "Bagus! Ini adalah aksara Ta. Dibaca “ta”.",
+  "label": "Aksara Ta berhasil"
+ },
+ {
+  "key": "huruf_sa",
+  "file": "g_huruf_sa.mp3",
+  "dur": 3.6,
+  "text": "Bagus! Ini adalah aksara Sa. Dibaca “sa”.",
+  "label": "Aksara Sa berhasil"
+ },
+ {
+  "key": "huruf_wa",
+  "file": "g_huruf_wa.mp3",
+  "dur": 3.61,
+  "text": "Bagus! Ini adalah aksara Wa. Dibaca “wa”.",
+  "label": "Aksara Wa berhasil"
+ },
+ {
+  "key": "huruf_la",
+  "file": "g_huruf_la.mp3",
+  "dur": 3.54,
+  "text": "Bagus! Ini adalah aksara La. Dibaca “la”.",
+  "label": "Aksara La berhasil"
+ },
+ {
+  "key": "huruf_pa",
+  "file": "g_huruf_pa.mp3",
+  "dur": 3.59,
+  "text": "Bagus! Ini adalah aksara Pa. Dibaca “pa”.",
+  "label": "Aksara Pa berhasil"
+ },
+ {
+  "key": "huruf_dha",
+  "file": "g_huruf_dha.mp3",
+  "dur": 3.65,
+  "text": "Bagus! Ini adalah aksara Dha. Dibaca “dha”.",
+  "label": "Aksara Dha berhasil"
+ },
+ {
+  "key": "huruf_ja",
+  "file": "g_huruf_ja.mp3",
+  "dur": 3.81,
+  "text": "Bagus! Ini adalah aksara Ja. Dibaca “ja”.",
+  "label": "Aksara Ja berhasil"
+ },
+ {
+  "key": "huruf_ya",
+  "file": "g_huruf_ya.mp3",
+  "dur": 3.6,
+  "text": "Bagus! Ini adalah aksara Ya. Dibaca “ya”.",
+  "label": "Aksara Ya berhasil"
+ },
+ {
+  "key": "huruf_nya",
+  "file": "g_huruf_nya.mp3",
+  "dur": 3.54,
+  "text": "Bagus! Ini adalah aksara Nya. Dibaca “nya”.",
+  "label": "Aksara Nya berhasil"
+ },
+ {
+  "key": "huruf_ma",
+  "file": "g_huruf_ma.mp3",
+  "dur": 3.59,
+  "text": "Bagus! Ini adalah aksara Ma. Dibaca “ma”.",
+  "label": "Aksara Ma berhasil"
+ },
+ {
+  "key": "huruf_ga",
+  "file": "g_huruf_ga.mp3",
+  "dur": 3.57,
+  "text": "Bagus! Ini adalah aksara Ga. Dibaca “ga”.",
+  "label": "Aksara Ga berhasil"
+ },
+ {
+  "key": "huruf_ba",
+  "file": "g_huruf_ba.mp3",
+  "dur": 3.56,
+  "text": "Bagus! Ini adalah aksara Ba. Dibaca “ba”.",
+  "label": "Aksara Ba berhasil"
+ },
+ {
+  "key": "huruf_tha",
+  "file": "g_huruf_tha.mp3",
+  "dur": 3.69,
+  "text": "Bagus! Ini adalah aksara Tha. Dibaca “tha”.",
+  "label": "Aksara Tha berhasil"
+ },
+ {
+  "key": "huruf_nga",
+  "file": "g_huruf_nga.mp3",
+  "dur": 3.6,
+  "text": "Bagus! Ini adalah aksara Nga. Dibaca “nga”.",
+  "label": "Aksara Nga berhasil"
+ },
+ {
+  "key": "baris1_selesai",
+  "file": "g_baris1_selesai.mp3",
+  "dur": 4.06,
+  "text": "Kita berhasil menyelesaikan baris pertama! Ayo, baca bersama!",
+  "label": "Baris 1 selesai"
+ },
+ {
+  "key": "baris1_baca",
+  "file": "g_baris1_baca.mp3",
+  "dur": 4.6,
+  "text": "Ha, Na, Ca, Ra, Ka.",
+  "label": "Baca baris 1"
+ },
+ {
+  "key": "baris2_selesai",
+  "file": "g_baris2_selesai.mp3",
+  "dur": 3.91,
+  "text": "Hebat! Baris kedua sudah selesai. Yuk, baca bersama!",
+  "label": "Baris 2 selesai"
+ },
+ {
+  "key": "baris2_baca",
+  "file": "g_baris2_baca.mp3",
+  "dur": 4.54,
+  "text": "Da, Ta, Sa, Wa, La.",
+  "label": "Baca baris 2"
+ },
+ {
+  "key": "baris3_selesai",
+  "file": "g_baris3_selesai.mp3",
+  "dur": 5.48,
+  "text": "Wah, tinggal satu baris lagi! Sekarang, kita baca baris ketiga!",
+  "label": "Baris 3 selesai"
+ },
+ {
+  "key": "baris3_baca",
+  "file": "g_baris3_baca.mp3",
+  "dur": 4.56,
+  "text": "Pa, Dha, Ja, Ya, Nya.",
+  "label": "Baca baris 3"
+ },
+ {
+  "key": "baris4_selesai",
+  "file": "g_baris4_selesai.mp3",
+  "dur": 3.41,
+  "text": "Luar biasa! Kita sudah menyelesaikan seluruh aksaranya!",
+  "label": "Baris 4 selesai"
+ },
+ {
+  "key": "baris4_ajak",
+  "file": "g_baris4_ajak.mp3",
+  "dur": 1.96,
+  "text": "Ayo, baca baris terakhir!",
+  "label": "Ajak baca baris terakhir"
+ },
+ {
+  "key": "baris4_baca",
+  "file": "g_baris4_baca.mp3",
+  "dur": 4.64,
+  "text": "Ma, Ga, Ba, Tha, Nga.",
+  "label": "Baca baris 4"
+ },
+ {
+  "key": "selesai",
+  "file": "g_selesai.mp3",
+  "dur": 8.57,
+  "text": "Terima kasih, teman-teman. Sekarang, mari kita cari tahu makna dari semua aksara yang telah kita tulis.",
+  "label": "Semua selesai"
+ },
+ {
+  "key": "coba_lagi",
+  "file": "g_coba_lagi.mp3",
+  "dur": 1.59,
+  "text": "Coba lagi, ya.",
+  "label": "Perlu mencoba lagi"
+ },
+ {
+  "key": "ikuti_garis",
+  "file": "g_ikuti_garis.mp3",
+  "dur": 1.74,
+  "text": "Ikuti garisnya perlahan.",
+  "label": "Perlu bantuan"
+ }
+]
