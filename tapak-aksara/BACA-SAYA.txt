@@ -1,16 +1,20 @@
 TAPAK AKSARA - game AR belajar menulis aksara Jawa (Hanacaraka)
+Revisi 13 Nov 2026: mengikuti PDF "Alur Permainan Kamera dan Jeda Sinematik", 49 JPG, dan paket TapakAksara_Audio.
 
 Buka lewat alamat web (bukan dobel-klik), mis.:
   https://amile23.github.io/dolanan-project/tapak-aksara/
 atau di laptop:  python -m http.server 8000  lalu buka http://localhost:8000/tapak-aksara/
+(Kalau dobel-klik, musik tidak bisa diputar oleh browser dan kamera tidak jalan.)
 
 Isi folder (harus tetap berdampingan):
-  index.html   game utama (satu berkas)
-  cerita/      gambar dan suara "Ikuti Cerita" (termasuk Labirin Dora dan Labirin Aji Saka)
-  musik/       musik cerita dan musik permainan
+  index.html   game utama
+  cerita/      gambar cerita, labirin, pusaka (dari 49 JPG)
+  musik/       musik menu, By Huruf, cerita (paket TapakAksara_Audio)
+  suara/       suara tokoh, suara By Huruf, bunyi aksara (laki-laki, gaya ho-no-co)
 
-Alur: Ikuti Cerita (animasi Aji Saka -> Labirin Dora -> Labirin Aji Saka -> ajakan)
-      -> tulis 20 aksara dengan jari -> belajar, gelembung (timer), selfie, kuis
-      -> setelah 20 aksara: batu pusaka + arti tiap baris + penutup.
-Labirin dan permainan lain bisa dimainkan dengan kamera (jari) atau dengan sentuh/mouse.
-File game lain di folder induk (index.html, nulis.html, app.js, ...) tidak diubah.
+Alur:
+  Beranda (Settings / Play / Quit) -> Pilih Aksara
+  By Huruf: menulis -> kenali aksara -> gelembung (semua valid) -> hebat -> selfie -> kuis -> "Aku Sudah Belajar Aksara ...!" -> gapura -> Pilih Aksara
+  Ikuti Cerita: adegan 10-33 (jeda sinematik sesudah dialog, labirin Dora & Aji Saka) -> mengukir 20 aksara ke pusaka
+                (makna tiap 5 huruf) -> kilas balik 4 makna -> pesan -> penutup kamera -> gapura -> Pilih Aksara
+  Quit kembali ke website Dolanan (folder induk).
