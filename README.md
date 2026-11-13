@@ -17,3 +17,7 @@ Cara 2 - Di laptop sendiri
     lalu buka http://localhost:8000 di Chrome.
 
 Semua file harus tetap di folder yang sama (audio, fonts, img, lib).
+
+TAPAK AKSARA (game AR menulis aksara Jawa + cerita Aji Saka + labirin)
+  - Ada di folder  tapak-aksara/  (buka tapak-aksara/index.html lewat server/web).
+  - Isinya index.html + folder cerita/ dan musik/ yang harus tetap berdampingan.
