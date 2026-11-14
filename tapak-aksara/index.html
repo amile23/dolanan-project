@@ -725,7 +725,7 @@ img.char{position:absolute;display:block;pointer-events:none;user-select:none;-w
       <div class="setrow" hidden><span>Efek suara dan nada gamelan</span><button class="sw" id="tgSfx" type="button" aria-pressed="true">Nyala</button></div>
       <div class="setrow"><span>Kembali otomatis ke pilihan aksara</span><button class="sw" id="tgAuto" type="button" aria-pressed="true">Nyala</button></div>
       <div class="setrow" hidden><span>Hiasan yang bisa disentuh</span><button class="sw" id="tgDecor" type="button" aria-pressed="true">Nyala</button></div>
-      <div class="setrow"><span>Tampilkan waktu (tanpa batas waktu)</span><button class="sw" id="tgTimer" type="button" aria-pressed="true">Nyala</button></div>
+      <div class="setrow"><span>Tampilkan waktu (menulis dan gelembung)</span><button class="sw" id="tgTimer" type="button" aria-pressed="true">Nyala</button></div>
       <div class="setrow" hidden><span id="lvLabel">Ukuran sasaran bintang</span><div class="seg" role="group" aria-labelledby="lvLabel"><button type="button" data-level="besar" aria-pressed="false">Besar</button><button type="button" data-level="sedang" aria-pressed="true">Sedang</button><button type="button" data-level="kecil" aria-pressed="false">Kecil</button></div></div>
     </div>
     <button class="bigbtn sm" id="btnCloseSet" type="button">Selesai</button>
@@ -1640,6 +1640,8 @@ function syncHands() { document.querySelectorAll('.hc').forEach(function (b) { b
 function syncSettings() {
   [['tgVoice', 'voice'], ['tgMusic', 'music'], ['tgSfx', 'sfx'], ['tgAuto', 'auto'], ['tgDecor', 'decor'], ['tgTimer', 'timer']].forEach(function (p) { const b = $(p[0]); b.setAttribute('aria-pressed', String(S.settings[p[1]])); b.textContent = S.settings[p[1]] ? 'Nyala' : 'Mati'; });
   document.querySelectorAll('.seg button').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.level === S.level)); });
+  /* "Tampilkan waktu" berlaku untuk semua timer: menulis (hTimer) dan gelembung (.bhud) */
+  $('hTimer').style.display = S.settings.timer ? '' : 'none'; document.querySelectorAll('.bhud').forEach(function (e) { e.style.display = S.settings.timer ? '' : 'none'; });
 }
 
 // ===== Memuat (kamera dan pelacak) =====
