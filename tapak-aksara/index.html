@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <script>/* pembaruan otomatis: cek version.txt di server; kalau versinya lebih baru dari halaman ini, muat ulang versi terbaru (tanpa Ctrl+Shift+R) */
-(function(){var B="20261114-202753-bc4f64";if(location.protocol==="file:"||B.charAt(0)==="_")return;var u;try{u=new URL(location.href)}catch(e){return}
+(function(){var B="20261114-211455-039ff4";if(location.protocol==="file:"||B.charAt(0)==="_")return;var u;try{u=new URL(location.href)}catch(e){return}
 fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(v){v=(v||"").trim();
 if(/^[0-9a-z-]{4,40}$/.test(v)&&v!==B&&u.searchParams.get("v")!==v){u.searchParams.set("v",v);location.replace(u.toString());}}).catch(function(){});})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -138,6 +138,14 @@ img.char{position:absolute;display:block;pointer-events:none;user-select:none;-w
 .scard small{font:600 calc(var(--u) * 34)/1.2 'Fredoka',sans-serif;color:var(--rust);margin-top:calc(var(--u) * 16)}
 .scard[hidden]{display:none}
 .photo{z-index:6}
+/* kartu pilihan sebelum foto: Foto / Lewati */
+.phask{position:absolute;inset:0;z-index:8;display:flex;align-items:center;justify-content:center;background:rgba(40,20,5,.45)}
+.phask[hidden]{display:none}
+.phask .pk{background:#FBF2E4;border-radius:calc(var(--u) * 40);padding:calc(var(--u) * 34) calc(var(--u) * 52) calc(var(--u) * 38);text-align:center;box-shadow:0 calc(var(--u) * 14) calc(var(--u) * 40) rgba(30,10,0,.4);animation:popIn .7s var(--ease) backwards;max-width:calc(var(--u) * 760)}
+.phask h3{margin:0 0 calc(var(--u) * 8);font:700 calc(var(--u) * 46)/1.15 'Fredoka',sans-serif;color:var(--wood)}
+.phask p{margin:0 0 calc(var(--u) * 28);font:600 calc(var(--u) * 26)/1.3 'Fredoka',sans-serif;color:#8A6A52}
+.phask .pkb{display:flex;gap:calc(var(--u) * 26);justify-content:center}
+.phask .cd{margin:calc(var(--u) * 24) auto 0;background:rgba(94,53,25,.14)}
 .quitbox{position:absolute;inset:0;z-index:5;background:rgba(40,20,5,.45);display:flex;align-items:center;justify-content:center}
 .quitbox .qcard{width:calc(var(--u) * 560);background:var(--cream2);border-radius:calc(var(--u) * 30);padding:calc(var(--u) * 34) calc(var(--u) * 40) calc(var(--u) * 30);display:flex;flex-direction:column;align-items:center;gap:calc(var(--u) * 14);text-align:center;box-shadow:0 calc(var(--u) * 14) calc(var(--u) * 34) rgba(40,15,0,.4);animation:popIn .6s var(--ease) backwards}
 .quitbox b{font:700 calc(var(--u) * 34)/1.2 'Fredoka',sans-serif;color:var(--wood)}
@@ -708,6 +716,7 @@ img.char{position:absolute;display:block;pointer-events:none;user-select:none;-w
     <div class="w7b"><button class="bigbtn gold" id="btnAgain" type="button">Ulangi</button><button class="bigbtn pink" id="btnWinSel" type="button">Pilih aksara lain</button></div>
     <div class="cd w7cd" aria-hidden="true"><b id="cdFill"></b></div>
     <p class="note w7n" id="teacherNote"></p>
+    <div class="phask" id="winAsk" hidden><div class="pk"><h3>Mau foto dulu?</h3><p id="winAskSub">Foto kenang-kenangan bersama aksara Ha.</p><div class="pkb"><button class="bigbtn gold" id="btnAskFoto" type="button">Foto</button><button class="bigbtn" id="btnAskSkip" type="button">Lewati</button></div><div class="cd" aria-hidden="true"><b id="askFill"></b></div></div></div>
   </div>
 
   <div class="ov uk" id="ovUkir" hidden data-mode="card">
@@ -1413,6 +1422,7 @@ function dwellButtons() {
   document.querySelectorAll('#stage button').forEach(function (b) {
     if (b.disabled || b.offsetParent === null) return;
     const ov = b.closest('.ov'); if (ov && ov.id !== S.ui) return;
+    const ask = ov && ov.querySelector('.phask:not([hidden])'); if (ask && !ask.contains(b)) return;   /* kartu Foto/Lewati terbuka: hanya tombol di kartu itu */
     if (S.ui === 'ovStory' && (!b.classList.contains('stcta') || !b.classList.contains('in'))) return;   /* di cerita hanya tombol ajakan yang bisa ditekan dengan jari */
     const r = b.getBoundingClientRect(); if (r.width < 4) return;
     out.push({ b: b, r: r });
@@ -1604,7 +1614,7 @@ function placeWmark() {
 setInterval(placeWmark, 400);
 function showOnly(id) {
   OVERLAYS.forEach(function (x) { $(x).hidden = x !== id; });
-  S.ui = id; setTimeout(placeWmark, 40);
+  S.ui = id; setTimeout(placeWmark, 40); if (id !== 'ovWin' && id !== 'ovPause' && id !== 'ovSettings') { clearTimeout(S.askT); const wa = document.getElementById('winAsk'); if (wa) wa.hidden = true; }
   if (id === 'ovTitle' || id === 'ovSelect') S.ukMode = false;
   if (id !== 'ovUkir' && id !== 'ovGate' && id !== 'ovLearn' && id !== 'ovBub' && id !== null && id !== 'ovMaze' && id !== 'ovLoadMini') stopUiVoice();
   musForUi(id);
@@ -1986,7 +1996,7 @@ function quizFrame(now) {
 function showFinal() {
   const nm = LETTERS[S.idx][1]; $('winTitle').innerHTML = 'Aku Sudah<br>Belajar Aksara ' + cap(nm) + '!'; $('aliveG').textContent = LETTERS[S.idx][0]; $('winName').textContent = cap(nm);
   showOnly('ovWin'); popWord('winWord', ''); $('say').hidden = true; spawnConfetti(70, 'rain'); spawnConfetti(30, 'burst'); after(600, function () { uiVoice(['b04_hebat_' + LETTERS[S.idx][1]]); });
-  if (camLive()) { $('cdFill').style.transition = 'none'; $('cdFill').style.width = '0%'; winPhoto(); } else scheduleAuto();
+  if (camLive()) { $('cdFill').style.transition = 'none'; $('cdFill').style.width = '0%'; winAsk(); } else scheduleAuto();
 }
 function camLive() { return S.mode === 'camera' && vid.readyState >= 2 && !!vid.videoWidth; }
 /* hitung mundur 3-2-1 lalu potret. tick(kata, n) dipanggil tiap langkah; selesai(url) sesudah potret */
@@ -2002,6 +2012,22 @@ function countdownShot(wordId, guard, compose, done) {
     S.shots = (S.shots || 0) + 1; done(url);
   }, 5500);
 }
+/* sebelum foto: tanya dulu (Foto / Lewati). Tidak dijawab 20 detik = Lewati (tanpa foto) */
+const ASK_MS = 20000;
+function winAsk() {
+  const id = S.stage; clearTimeout(S.askT); S.askT = setTimeout(function () { if (S.stage === id && S.ui === 'ovWin') winAskShow(id); }, 2600);   /* rayakan dulu sebentar, baru tanya */
+}
+function winAskShow(id) {
+  $('winAskSub').textContent = 'Foto kenang-kenangan bersama aksara ' + cap(LETTERS[S.idx][1]) + '.'; $('winAsk').hidden = false;
+  const f = $('askFill'); f.style.transition = 'none'; f.style.width = '0%'; void f.offsetWidth; f.style.transition = 'width ' + ASK_MS + 'ms linear'; f.style.width = '100%';
+  clearTimeout(S.askT); S.askT = setTimeout(function () { if (S.stage === id && S.ui === 'ovWin' && !$('winAsk').hidden) winAnswer(false); }, ASK_MS);
+}
+function winAnswer(foto) {
+  clearTimeout(S.askT); if ($('winAsk').hidden) return; $('winAsk').hidden = true; S.photoAsked = foto ? 'foto' : 'lewati';
+  if (foto && camLive()) winPhoto(); else scheduleAuto();
+}
+$('btnAskFoto').addEventListener('click', function () { winAnswer(true); });
+$('btnAskSkip').addEventListener('click', function () { winAnswer(false); });
 function winPhoto() {
   const id = S.stage;
   countdownShot('winWord', function () { return S.stage === id && S.ui === 'ovWin'; }, drawWinPhoto, function (url) {
@@ -2725,12 +2751,26 @@ function stViewFrame(now) {
   else if (!p.bgDrawn) { p.bgDrawn = true; c.filter = 'blur(6px) brightness(1.05)'; if (imgOk('bg')) c.drawImage(IMGS.bg, -20, -20, W + 40, H + 40); else { c.fillStyle = '#E9D8BE'; c.fillRect(0, 0, W, H); } c.filter = 'none'; }
   drawParticles(); dwellStep(now); drawCursors();
 }
-function stPhoto(i) {
-  const run = ST.run, p = ST.P[i], el = ST.PEL[i]; ST.shot = { i: i };
+function stPhoto(i) {      /* tanya dulu: Foto / Lewati (tidak dijawab 20 detik = Lewati) */
+  const run = ST.run, el = ST.PEL[i]; ST.shot = { i: i };
+  const ask = document.createElement('div'); ask.className = 'phask st48ask';
+  ask.innerHTML = '<div class="pk"><h3>Mau foto bersama?</h3><p>Berpose bersama Aji Saka, Dora, dan Sembada.</p><div class="pkb"><button class="bigbtn gold stcta in" type="button" data-a="foto">Foto</button><button class="bigbtn stcta in" type="button" data-a="skip">Lewati</button></div><div class="cd" aria-hidden="true"><b></b></div></div>';
+  el.appendChild(ask);
+  const fl = ask.querySelector('.cd b'); fl.style.width = '0%'; void fl.offsetWidth; fl.style.transition = 'width 20000ms linear'; fl.style.width = '100%';
+  const answer = function (foto) {
+    if (ST.run !== run || !ST.shot || ST.shot.asked) return; ST.shot.asked = foto ? 'foto' : 'lewati'; clearTimeout(ST.shot.t); ask.remove();
+    if (foto && camLive()) stShoot(i); else { ST.shot.done = true; ST.gateDone[i] = true; ST.gate = false; ST.last = performance.now(); }
+  };
+  ask.querySelector('[data-a="foto"]').addEventListener('click', function () { answer(true); });
+  ask.querySelector('[data-a="skip"]').addEventListener('click', function () { answer(false); });
+  ST.shot.t = setTimeout(function () { answer(false); }, 20000);
+}
+function stShoot(i) {
+  const run = ST.run, p = ST.P[i], el = ST.PEL[i];
   countdownShot('stWord', function () { return ST.run === run && ST.shown === i && S.ui === 'ovStory'; }, function (g) { stDraw48(g, p); }, function (url) {
     ST.shot.url = url;
     const box = document.createElement('div'); box.className = 'st48shot';
-    box.innerHTML = '<img alt="Foto bersama Aji Saka, Dora, dan Sembada"><div class="st48row"><button class="bigbtn sm" type="button" data-a="down">Unduh foto</button><button class="bigbtn gold sm" type="button" data-a="go">Lanjut ›</button></div>';
+    box.innerHTML = '<img alt="Foto bersama Aji Saka, Dora, dan Sembada"><div class="st48row"><button class="bigbtn sm stcta in" type="button" data-a="down">Unduh foto</button><button class="bigbtn gold sm stcta in" type="button" data-a="go">Lanjut ›</button></div>';
     box.querySelector('img').src = url; el.appendChild(box);
     const go = function () { if (ST.run !== run || !ST.shot || ST.shot.done) return; ST.shot.done = true; clearTimeout(ST.shot.t); box.remove(); ST.gateDone[i] = true; ST.gate = false; ST.last = performance.now(); };
     box.querySelector('[data-a="down"]').addEventListener('click', function () { downloadPhoto(url, 'foto-tapak-aksara-aji-saka.png'); });
