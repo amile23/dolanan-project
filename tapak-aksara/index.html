@@ -1684,6 +1684,17 @@ const HC_LINES = [['Hananing cipta, rasa, lan karsa', 'ada utusan'], ['Datan sal
 const BUB = { secs: 30 };   /* ronde gelembung berdasarkan waktu saja, tanpa target jumlah */
 function after(ms, fn) { const id = S.stage; return setTimeout(function () { if (S.stage === id) fn(); }, ms); }
 function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+/* gambar aksara agar selalu muat di kotak (bx,by,bw,bh): ukuran dihitung dari lebar DAN tinggi bentuk hurufnya,
+   lalu dipotong di dalam kartu (clipPath) supaya tidak pernah keluar walau font cadangan perangkat lebih besar */
+function fitGlyph(c, gl, bx, by, bw, bh, maxFs, clipPath) {
+  c.save(); if (clipPath) { clipPath(); c.clip(); }
+  c.textAlign = 'left'; c.textBaseline = 'alphabetic'; c.font = '700 100px AksaraJawa';
+  const m = c.measureText(gl), L = m.actualBoundingBoxLeft || 0, R = m.actualBoundingBoxRight || m.width, A = m.actualBoundingBoxAscent || 70, Dd = m.actualBoundingBoxDescent || 0;
+  const gw = Math.max(1, L + R), gh = Math.max(1, A + Dd), fs = Math.min(maxFs, 100 * Math.min(bw / gw, bh / gh)), k = fs / 100;
+  c.font = '700 ' + fs + 'px AksaraJawa'; c.fillStyle = WOOD;
+  c.fillText(gl, bx + bw / 2 - (R - L) * k / 2, by + bh / 2 + (A - Dd) * k / 2);
+  c.restore();
+}
 function fillMid(c, text, x, y) { c.textBaseline = 'alphabetic'; const m = c.measureText(text); c.fillText(text, x, y + (m.actualBoundingBoxAscent - m.actualBoundingBoxDescent) / 2); }
 function popWord(id, text) { const w = $(id); w.textContent = text; w.classList.remove('pop'); void w.offsetWidth; if (text) w.classList.add('pop'); }
 function fireworks(x, y, col) {
@@ -1959,8 +1970,7 @@ function quizFrame(now) {
     ctx.save(); ctx.translate(c.x + c.w / 2 + sx, c.y + c.h / 2 + lift + 10 * pr); ctx.scale(sc, sc); ctx.translate(-(c.x + c.w / 2), -(c.y + c.h / 2));
     rr(ctx, c.x, c.y, c.w, c.h, 40); ctx.shadowColor = 'rgba(0,0,0,.25)'; ctx.shadowBlur = 20; ctx.shadowOffsetY = 8; ctx.fillStyle = fb > 0 ? '#E6FBD9' : '#FFF8EC'; ctx.fill(); ctx.shadowColor = 'transparent';
     const hint = z.wrong >= 2 && z.cards[k] === z.targets[z.q] && fb === 0; ctx.lineWidth = hint ? 9 + 6 * Math.abs(Math.sin(now / 250)) : 9; ctx.strokeStyle = fb > 0 ? '#3CA55C' : fb < 0 ? '#BE5130' : hint ? '#3CA55C' : inside ? '#0A9AB5' : '#E2AE16'; ctx.stroke();
-    const gl = LETTERS[z.cards[k]][0]; ctx.font = '700 150px AksaraJawa'; const w = ctx.measureText(gl).width, fs = Math.min(150, 150 * (c.w - 60) / w);
-    ctx.font = '700 ' + fs + 'px AksaraJawa'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = WOOD; fillMid(ctx, gl, c.x + c.w / 2, c.y + c.h / 2 - 10);
+    const gl = LETTERS[z.cards[k]][0]; fitGlyph(ctx, gl, c.x + 36, c.y + 36, c.w - 72, c.h - 96, 150, rr.bind(null, ctx, c.x + 5, c.y + 5, c.w - 10, c.h - 10, 35));
     if (z.dw[k] > 0) { rr(ctx, c.x + 40, c.y + c.h - 26, c.w - 80, 12, 6); ctx.fillStyle = 'rgba(0,0,0,.1)'; ctx.fill(); rr(ctx, c.x + 40, c.y + c.h - 26, Math.max(12, (c.w - 80) * z.dw[k] / QUIZ_PRESS), 12, 6); ctx.fillStyle = '#0A9AB5'; ctx.fill(); }
     ctx.restore();
   });
