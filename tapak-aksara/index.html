@@ -622,7 +622,7 @@ img.char{position:absolute;display:block;pointer-events:none;user-select:none;-w
     <div class="word" id="bubWord" aria-live="assertive"></div>
     <div class="card inst pa" id="bubInst">
       <h2>PETUNJUK</h2>
-      <div class="stp"><b>Langkah 1</b><div class="sbub aksara" id="bubTarget">ꦲ</div><span>Sentuh gelembung aksara <b id="bubTargetN">“ha”</b> untuk mendengar bunyinya. Semua gelembung boleh dipilih!</span></div>
+      <div class="stp"><b>Langkah 1</b><div class="sbub aksara" id="bubTarget">ꦲ</div><span>Pecahkan gelembung aksara <b id="bubTargetN">“ha”</b> dengan tanganmu. Semua gelembung boleh dipilih!</span></div>
       <div class="stp"><b>Langkah 2</b><svg viewBox="0 0 50 78" style="width:calc(var(--u) * 40);height:calc(var(--u) * 62)" aria-hidden="true"><use href="#hand" width="50" height="78"/></svg><span>Pakai dua tangan</span></div>
       <button class="bigbtn sm" id="btnBubGo" type="button">Mulai</button>
     </div>
@@ -1943,7 +1943,7 @@ function quizFrame(now) {
 // 6. Penutup
 function showFinal() {
   const nm = LETTERS[S.idx][1]; $('winTitle').innerHTML = 'Aku Sudah<br>Belajar Aksara ' + cap(nm) + '!'; $('aliveG').textContent = LETTERS[S.idx][0]; $('winName').textContent = cap(nm);
-  showOnly('ovWin'); popWord('winWord', ''); spawnConfetti(70, 'rain'); spawnConfetti(30, 'burst'); after(600, function () { uiVoice(['b04_hebat_' + LETTERS[S.idx][1]]); });
+  showOnly('ovWin'); popWord('winWord', ''); $('say').hidden = true; spawnConfetti(70, 'rain'); spawnConfetti(30, 'burst'); after(600, function () { uiVoice(['b04_hebat_' + LETTERS[S.idx][1]]); });
   if (camLive()) { $('cdFill').style.transition = 'none'; $('cdFill').style.width = '0%'; winPhoto(); } else scheduleAuto();
 }
 function camLive() { return S.mode === 'camera' && vid.readyState >= 2 && !!vid.videoWidth; }
