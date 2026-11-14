@@ -134,6 +134,10 @@ img.char{position:absolute;display:block;pointer-events:none;user-select:none;-w
 .scard small{font:600 calc(var(--u) * 34)/1.2 'Fredoka',sans-serif;color:var(--rust);margin-top:calc(var(--u) * 16)}
 .scard[hidden]{display:none}
 .photo{z-index:6}
+.quitbox{position:absolute;inset:0;z-index:5;background:rgba(40,20,5,.45);display:flex;align-items:center;justify-content:center}
+.quitbox .qcard{width:calc(var(--u) * 560);background:var(--cream2);border-radius:calc(var(--u) * 30);padding:calc(var(--u) * 34) calc(var(--u) * 40) calc(var(--u) * 30);display:flex;flex-direction:column;align-items:center;gap:calc(var(--u) * 14);text-align:center;box-shadow:0 calc(var(--u) * 14) calc(var(--u) * 34) rgba(40,15,0,.4);animation:popIn .6s var(--ease) backwards}
+.quitbox b{font:700 calc(var(--u) * 34)/1.2 'Fredoka',sans-serif;color:var(--wood)}
+.quitbox span{font:500 calc(var(--u) * 22)/1.35 'Fredoka',sans-serif;color:var(--wood2)}
 .camflash{position:absolute;inset:0;background:#fff;opacity:0;z-index:40}
 .camflash.go{animation:camfl .7s ease-out}
 @keyframes camfl{0%{opacity:.95}100%{opacity:0}}
@@ -542,6 +546,7 @@ img.char{position:absolute;display:block;pointer-events:none;user-select:none;-w
     <h1 class="logo" aria-label="Tapak Aksara"><span class="r1" aria-hidden="true"><span class="c" style="--i:0">T</span><span class="c" style="--i:1">A</span><span class="c" style="--i:2">P</span><span class="c" style="--i:3">A</span><span class="c" style="--i:4">K</span></span><span class="r2" aria-hidden="true"><span class="c" style="--i:5">A</span><span class="c" style="--i:6">K</span><span class="c" style="--i:7">S</span><span class="c" style="--i:8">A</span><span class="c" style="--i:9">R</span><span class="c" style="--i:10">A</span></span></h1>
     <div class="btnrow"><button class="bigbtn" id="btnSettings" type="button">Settings</button><button class="bigbtn gold" id="btnPlay" type="button">Play</button><button class="bigbtn pink" id="btnQuit" type="button">Quit</button></div>
     <div class="env" id="envCheck" aria-live="polite"></div>
+    <div class="quitbox" id="quitBox" role="dialog" aria-label="Website Dolanan" hidden><div class="qcard"><b>Web masih dalam proses pengembangan</b><span>Website Dolanan sedang kami siapkan. Sampai jumpa lagi, ya!</span><button class="bigbtn gold sm" id="btnQuitOk" type="button">Kembali</button></div></div>
     <button class="linkbtn edlink" id="btnEditor" type="button" hidden>Atur urutan bintang (guru)</button>
   </div>
 
@@ -2073,11 +2078,10 @@ function goHome() { stopSpeech(); stopCamera(); S.mode = null; S.done = false; S
 $('btnPlay').addEventListener('click', function () { ac(); buildGrid(); showOnly('ovSelect'); uiVoice(['m03_003_aji_saka']); });
 $('btnSettings').addEventListener('click', function () { ac(); syncSettings(); S.settingsFrom = 'ovTitle'; showOnly('ovSettings'); uiVoice(['m02_002_aji_saka']); });
 $('btnStory').addEventListener('click', function () { ac(); stopUiVoice(); startStory('main', startUkir); });
-$('btnQuit').addEventListener('click', function () {   /* Quit: kembali ke website Dolanan (folder induk) */
-  ac(); musStinger('UI-M04'); showBubble(VOICE['m04_004_aji_saka'][2]);
-  let gone = false; const go = function () { if (gone) return; gone = true; try { window.location.href = '../'; } catch (e) { /* abaikan */ } };
-  uiVoice(['m04_004_aji_saka'], function () { setTimeout(go, 600); }); setTimeout(go, 9000);
+$('btnQuit').addEventListener('click', function () {   /* revisi 14 Nov: website Dolanan belum ada -> cukup pesan, tidak pindah halaman */
+  ac(); $('quitBox').hidden = false;
 });
+$('btnQuitOk').addEventListener('click', function () { $('quitBox').hidden = true; });
 $('btnSelBack').addEventListener('click', function () { if (S.mode) showOnly('ovPause'); else showOnly('ovTitle'); });
 $('btnHowBack').addEventListener('click', function () { showOnly('ovSelect'); });
 $('btnHowHear').addEventListener('click', function () { say('Angkat satu tangan ke depan kamera. Lalu kumpulkan semua bintang untuk menulis aksara.', { force: true, key: 'how', bubble: false }); });
