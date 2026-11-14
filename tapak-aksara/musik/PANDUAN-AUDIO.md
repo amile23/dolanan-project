@@ -119,3 +119,14 @@ Aksara | Baca | Cara mengucap
 Huruf "berat" (b, d, dh, j, g) di Jawa diucapkan sedikit mendesah dengan nada lebih rendah; di file gelembung
 nadanya sudah diturunkan sedikit. Bunyi gelembung dibuat dengan suara berbahasa Hindi karena Hindi, seperti Jawa,
 membedakan t/d dental dan retrofleks. Tetap minta guru Bahasa Jawa memeriksa, terutama Dha dan Tha.
+
+## Revisi 14 Nov 2026 — musik sesi main dibedakan dari beranda
+Beranda (UI-M01..M04) tetap GANDRUNG. Sesi main By Huruf memakai gamelan dolanan sintetis (komposisi orisinal, slendro, lancaran):
+- BH-01 Tangan Menulis -> byhuruf/dolanan_tulis (tenang, ketukan 0,66 dtk)
+- BH-03 Gelembung & Kuis -> byhuruf/dolanan_main (riang, ketukan 0,5 dtk, kentongan)
+- BH-04 Satu Huruf Berhasil -> byhuruf/dolanan_berhasil (bonang naik + gong, sekali)
+- BH-05 Pulang ke Pendapa / layar foto -> byhuruf/dolanan_pulang
+- BH-02 Kenali Aksara tetap GEMASHANTI (bh_02).
+File lama bh_01/03/04/05 masih disimpan (tidak dipakai).
+Efek bunyi (disintesis di game): bintang = nada saron naik, selesai menulis = bonang berlari + gong,
+kuis benar = peking/bonang + kenong, kuis salah = "te-tot", foto = klik rana + ting, hitung mundur = bonang.

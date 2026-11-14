@@ -134,6 +134,11 @@ img.char{position:absolute;display:block;pointer-events:none;user-select:none;-w
 .scard small{font:600 calc(var(--u) * 34)/1.2 'Fredoka',sans-serif;color:var(--rust);margin-top:calc(var(--u) * 16)}
 .scard[hidden]{display:none}
 .photo{z-index:6}
+.camflash{position:absolute;inset:0;background:#fff;opacity:0;z-index:40}
+.camflash.go{animation:camfl .7s ease-out}
+@keyframes camfl{0%{opacity:.95}100%{opacity:0}}
+.phcd{position:absolute!important;left:50%;top:calc(var(--u) * 650);margin:0 0 0 calc(var(--u) * -180)!important}
+#winWord{z-index:3;top:calc(var(--u) * 230)}
 .pimg{position:absolute;left:50%;top:calc(var(--u) * 34);width:calc(var(--u) * 800);height:calc(var(--u) * 450);margin-left:calc(var(--u) * -400);border-radius:calc(var(--u) * 26);border:calc(var(--u) * 10) solid var(--cream);box-shadow:0 calc(var(--u) * 14) calc(var(--u) * 34) rgba(40,15,0,.4);animation:popIn .9s var(--ease) backwards}
 .prow{position:absolute;left:0;right:0;top:calc(var(--u) * 552);display:flex;gap:calc(var(--u) * 26);justify-content:center;animation:rise .9s var(--ease) .3s backwards}
 .qtop{position:absolute;left:calc(var(--u) * 160);right:0;top:calc(var(--u) * 100);display:flex;flex-direction:column;align-items:center;gap:calc(var(--u) * 8)}
@@ -480,6 +485,12 @@ img.char{position:absolute;display:block;pointer-events:none;user-select:none;-w
 /* adegan yang teksnya sudah tampil di plat: subtitle bawah disembunyikan */
 #ovStory.nocap .stcap{opacity:0!important}
 
+/* revisi 14 Nov: foto bersama di adegan 48 */
+#ovStory #stWord{z-index:8;top:28%}
+#ovStory .st48shot{position:absolute;inset:0;z-index:7;background:rgba(40,20,5,.55);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2cqw;animation:rise .8s var(--ease) backwards}
+#ovStory .st48shot img{width:60%;aspect-ratio:16/9;border:.8cqw solid #FBF2E4;border-radius:2cqw;box-shadow:0 1.2cqw 3cqw rgba(30,10,0,.45)}
+#ovStory .st48row{display:flex;gap:2cqw}
+
 .say{pointer-events:none}
 </style>
 </head>
@@ -618,7 +629,8 @@ img.char{position:absolute;display:block;pointer-events:none;user-select:none;-w
 
   <div class="ov photo" id="ovPhoto" hidden>
     <img class="pimg" id="photoImg" alt="Foto selfie belajar aksara">
-    <div class="prow"><button class="bigbtn sm" id="btnDown" type="button">Unduh</button><button class="bigbtn gold sm" id="btnPhotoHome" type="button">Beranda</button><button class="bigbtn pink sm" id="btnQuiz" type="button">Kuis</button></div>
+    <div class="prow"><button class="bigbtn sm" id="btnDown" type="button">Unduh foto</button><button class="bigbtn gold sm" id="btnPhAgain" type="button">Ulangi</button><button class="bigbtn pink sm" id="btnPhNext" type="button">Pilih aksara lain</button></div>
+    <div class="cd phcd" aria-hidden="true"><b id="cdFill2"></b></div>
   </div>
 
   <div class="ov thru" id="ovQuiz" hidden><div class="qtop"><div class="qq" id="quizQ"></div><div class="qn" id="quizN">1/3</div></div><div class="word qmsg" id="quizWord"></div></div>
@@ -644,6 +656,7 @@ img.char{position:absolute;display:block;pointer-events:none;user-select:none;-w
       <button class="rb" id="stMute" type="button" aria-pressed="false" aria-label="Matikan suara"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9z" fill="currentColor"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
       <button class="skipS" id="stSkip" type="button">Lewati cerita ›</button>
     </div>
+    <div class="word" id="stWord" aria-live="assertive"></div>
     <div class="stov" id="stBlack"></div>
     <div class="stload" id="stLoad" role="status" aria-live="polite">
       <div class="orn" aria-hidden="true"><svg class="o1" viewBox="0 0 100 100"><use href="#orn" width="100" height="100"/></svg><svg class="o2" viewBox="0 0 100 100"><use href="#orn" width="100" height="100"/></svg><svg class="o3" viewBox="0 0 100 100"><use href="#orn" width="100" height="100"/></svg></div>
@@ -652,6 +665,7 @@ img.char{position:absolute;display:block;pointer-events:none;user-select:none;-w
     </div>
   </div>
 
+  <div class="camflash thru" id="camFlash"></div>
   <div class="word thru" id="doneWord" style="z-index:6;top:calc(var(--u) * 40)"></div>
   <button class="linkbtn skip" id="btnSkip" type="button" hidden>Lewati ›</button>
   <button class="linkbtn chome" id="btnChainHome" type="button" hidden>Beranda</button>
@@ -668,6 +682,7 @@ img.char{position:absolute;display:block;pointer-events:none;user-select:none;-w
   </div></div>
 
   <div class="ov win7" id="ovWin" hidden role="dialog" aria-label="Aku sudah belajar aksara">
+    <div class="word" id="winWord" aria-live="assertive"></div>
     <div class="w7t" id="winTitle">Aku Sudah<br>Belajar Aksara Ha!</div>
     <div class="w7l">TAPAK AKSARA</div>
     <div class="w7g"><b class="aksara" id="aliveG">ꦲ</b><span id="winName">Ha</span></div>
@@ -811,7 +826,63 @@ function tone(freq, start, dur, gain, type) {
   o.connect(g); g.connect(a.destination); o.start(t); o.stop(t + dur + 0.05);
 }
 function bell(note) { const f = 261.63 * Math.pow(2, note / 5); tone(f, 0, 1.2, 0.2, 'sine'); tone(f * 2.01, 0, 0.7, 0.07, 'sine'); tone(f * 3.97, 0, 0.35, 0.035, 'sine'); }
-function starSound(k) { const f = 392 * Math.pow(2, (k % 10) / 5); tone(f, 0, 0.4, 0.13, 'triangle'); tone(f * 2, 0.02, 0.25, 0.05, 'sine'); }
+/* ===== Efek bunyi gamelan dolanan (revisi 14 Nov): saron, bonang, peking, gong, kendang — disintesis langsung ===== */
+function gsOn() { if (S.settings.sfx === false) return null; return ac(); }
+function slen(i) { const c = [0, 235, 475, 715, 955], o = Math.floor(i / 5); return 268 * Math.pow(2, o + c[((i % 5) + 5) % 5] / 1200); }
+const GS_KIND = {
+  saron:  { p: [1, 2.74, 5.3], d: [0.9, 0.32, 0.11], a: [1, 0.3, 0.12], att: 0.003 },
+  peking: { p: [2, 5.4, 10.4], d: [0.5, 0.18, 0.07], a: [1, 0.26, 0.1], att: 0.002 },
+  bonang: { p: [1, 1.52, 2.66], d: [1.0, 0.45, 0.22], a: [1, 0.36, 0.2], att: 0.008 },
+  kenong: { p: [1, 1.5, 2.4], d: [1.6, 0.6, 0.28], a: [1, 0.3, 0.14], att: 0.012 },
+  gong:   { p: [1, 1.012, 2.02, 2.9], d: [3.0, 3.0, 1.4, 0.7], a: [0.6, 0.5, 0.2, 0.08], att: 0.03 }
+};
+function gStrike(kind, f, when, gain, pan) {
+  const a = gsOn(); if (!a) return; const K = GS_KIND[kind], t0 = a.currentTime + (when || 0);
+  const out = a.createGain(); out.gain.value = gain;
+  let dst = a.destination; if (a.createStereoPanner) { const pn = a.createStereoPanner(); pn.pan.value = pan || 0; out.connect(pn); pn.connect(a.destination); } else out.connect(dst);
+  K.p.forEach(function (pp, i) {
+    [0, 1.8].forEach(function (det, j) {        /* dua bilah sedikit beda nada -> ombak */
+      const o = a.createOscillator(), g = a.createGain(), d = K.d[i], amp = K.a[i] * (j ? 0.45 : 0.55);
+      o.type = 'sine'; o.frequency.value = f * pp + det * pp;
+      g.gain.setValueAtTime(0.0001, t0); g.gain.exponentialRampToValueAtTime(amp, t0 + K.att); g.gain.exponentialRampToValueAtTime(0.0001, t0 + d * 5);
+      o.connect(g); g.connect(out); o.start(t0); o.stop(t0 + d * 5 + 0.05);
+    });
+  });
+}
+function gNoise(when, dur, f1, f2, gain) {   /* kendang "tak", ketukan kentongan, klik kamera */
+  const a = gsOn(); if (!a) return; const t0 = a.currentTime + (when || 0), n = Math.floor(a.sampleRate * dur), b = a.createBuffer(1, n, a.sampleRate), d = b.getChannelData(0);
+  for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / n, 3);
+  const s = a.createBufferSource(), fl = a.createBiquadFilter(), g = a.createGain(); s.buffer = b; fl.type = 'bandpass'; fl.frequency.value = Math.sqrt(f1 * f2); fl.Q.value = 1.2; g.gain.value = gain;
+  s.connect(fl); fl.connect(g); g.connect(a.destination); s.start(t0);
+}
+function gDrum(when, f0, f1, dec, gain) {   /* kendang "dhung"/"tung" */
+  const a = gsOn(); if (!a) return; const t0 = a.currentTime + (when || 0), o = a.createOscillator(), g = a.createGain();
+  o.frequency.setValueAtTime(f0, t0); o.frequency.exponentialRampToValueAtTime(f1, t0 + 0.08);
+  g.gain.setValueAtTime(0.0001, t0); g.gain.exponentialRampToValueAtTime(gain, t0 + 0.004); g.gain.exponentialRampToValueAtTime(0.0001, t0 + dec * 5);
+  o.connect(g); g.connect(a.destination); o.start(t0); o.stop(t0 + dec * 5 + 0.05);
+}
+/* bintang tersentuh: nada saron naik mengikuti tangga nada slendro */
+function starSound(k) { S.sfxN = (S.sfxN || 0) + 1; gStrike('saron', slen(k % 10), 0, 0.22, -0.2); gStrike('peking', slen(k % 10), 0.04, 0.06, 0.3); }
+/* kuis benar: peking dan bonang naik, kendang "tak", kenong */
+function sfxCorrect() {
+  S.sfxLast = 'benar'; [5, 6, 7].forEach(function (n, i) { gStrike('peking', slen(n), i * 0.09, 0.09, 0.2); gStrike('bonang', slen(n), i * 0.09, 0.16, -0.2); });
+  gNoise(0.3, 0.06, 1500, 4500, 0.35); gStrike('kenong', slen(8), 0.32, 0.22, 0); gDrum(0.32, 150, 80, 0.12, 0.35);
+}
+/* kuis salah: "te-tot" (dua nada rendah, lembut supaya tidak mengagetkan) */
+function sfxWrong() {
+  S.sfxLast = 'tetot'; const a = gsOn(); if (!a) return;
+  [[392, 0, 0.14], [262, 0.17, 0.42]].forEach(function (n) {
+    const t0 = a.currentTime + n[1], o = a.createOscillator(), f = a.createBiquadFilter(), g = a.createGain();
+    o.type = 'square'; o.frequency.value = n[0]; f.type = 'lowpass'; f.frequency.value = 1400;
+    g.gain.setValueAtTime(0.0001, t0); g.gain.exponentialRampToValueAtTime(0.12, t0 + 0.015); g.gain.setValueAtTime(0.12, t0 + n[2] - 0.05); g.gain.exponentialRampToValueAtTime(0.0001, t0 + n[2]);
+    o.connect(f); f.connect(g); g.connect(a.destination); o.start(t0); o.stop(t0 + n[2] + 0.05);
+  });
+}
+/* foto: klik rana + "ting" */
+function sfxShutter() { S.sfxLast = 'foto'; gNoise(0, 0.05, 2000, 6000, 0.5); gNoise(0.07, 0.04, 1500, 5000, 0.35); gStrike('peking', slen(7), 0.12, 0.08, 0); }
+/* hitung mundur foto: ketukan bonang */
+function sfxTick(n) { gStrike('bonang', slen(n), 0, 0.14, 0); }
+
 function applause() {
   if (!SOUND_ON) return;
   const a = ac(); if (!a || !S.settings.sfx) return;
@@ -824,12 +895,11 @@ function applause() {
     src.start(a.currentTime + 0.3 + Math.random() * 1.8);
   }
 }
-function celebrateSound(big) {
-  if (!SOUND_ON) return;
-  [0, 1, 2, 3, 4, 5].forEach(function (n, i) { setTimeout(function () { bell(n); }, i * 110); });
-  [523.25, 659.25, 783.99, 1046.5].forEach(function (f, i) { tone(f, 0.05 + i * 0.12, 0.5, 0.2, 'triangle'); });
-  if (big) [1046.5, 1318.5, 1568].forEach(function (f, i) { tone(f, 0.8 + i * 0.12, 0.7, 0.16, 'triangle'); });
-  applause();
+function celebrateSound(big) {         /* revisi 14 Nov: bonang berlari naik, kendang, gong */
+  S.sfxLast = 'hebat';
+  for (let i = 0; i < 8; i++) { gStrike('bonang', slen(i), i * 0.1, 0.16, -0.5 + i / 7); gStrike('peking', slen(i), i * 0.1 + 0.05, 0.05, 0.3); }
+  [0.82, 0.94, 1.06].forEach(function (t) { gNoise(t, 0.06, 1500, 4500, 0.3); }); gDrum(1.18, 150, 78, 0.16, 0.5);
+  gStrike('gong', big ? 52 : 64, 1.2, 0.5, 0); gStrike('kenong', slen(10), 1.2, 0.18, 0.2);
 }
 
 // ===== Suara pemandu =====
@@ -1195,10 +1265,11 @@ function finish() {
   S.winTimer = setTimeout(function () { if (S.done && S.ui === null) startLesson(); }, CFG.winDelayMs);
 }
 function scheduleAuto() {
-  clearTimeout(S.autoTimer); const fill = $('cdFill'); fill.style.transition = 'none'; fill.style.width = '0%';
+  clearTimeout(S.autoTimer); const ph = S.ui === 'ovPhoto', fill = $(ph ? 'cdFill2' : 'cdFill'), ms = ph ? CFG.autoNextMs + 6000 : CFG.autoNextMs;   /* layar foto: waktu lebih lama supaya sempat unduh */
+  fill.style.transition = 'none'; fill.style.width = '0%';
   if (!S.settings.auto) return;
-  void fill.offsetWidth; fill.style.transition = 'width ' + CFG.autoNextMs + 'ms linear'; fill.style.width = '100%';
-  S.autoTimer = setTimeout(goNext, CFG.autoNextMs);
+  void fill.offsetWidth; fill.style.transition = 'width ' + ms + 'ms linear'; fill.style.width = '100%';
+  S.autoTimer = setTimeout(goNext, ms);
 }
 function allDone() { for (let k = 0; k < LETTERS.length; k++) { if (!S.saved.done[k]) return false; } return true; }
 async function goNext() {          /* By Huruf selesai satu huruf: lewat gapura kembali ke pilihan aksara (8.jpg) */
@@ -1489,7 +1560,8 @@ function musForUi(id) {
   else if (id === 'ovSelect') musCue('UI-M03');
   else if (id === null || id === 'ovHow' || id === 'ovLoadMini') musCue('BH-01');
   else if (id === 'ovLearn') musCue('BH-02');
-  else if (id === 'ovBub' || id === 'ovGood' || id === 'ovSelfie' || id === 'ovPhoto' || id === 'ovQuiz') musCue('BH-03');
+  else if (id === 'ovBub' || id === 'ovGood' || id === 'ovSelfie' || id === 'ovQuiz') musCue('BH-03');
+  else if (id === 'ovPhoto') musCue('BH-05');
   else if (id === 'ovWin') musStinger('BH-04', 'BH-05');
   else if (id === 'ovGate') musCue('BH-05');
   else if (id === 'ovEdit') musStop(0.8);
@@ -1508,7 +1580,7 @@ function showOnly(id) {
   $('hUkSkip').hidden = !(S.ukMode && id === null); ukSkipReset();
   if (id !== null && id !== 'ovPause' && id !== 'ovSettings') popWord('doneWord', '');   /* "HEBAT!" jangan tertinggal di layar lain */
   stage.dataset.ui = String(id); S.stage++; $('btnSkip').hidden = $('btnChainHome').hidden = STAGE_IDS.indexOf(id) < 0;
-  if (id !== 'ovWin') clearTimeout(S.autoTimer);
+  if (id !== 'ovWin' && id !== 'ovPhoto') clearTimeout(S.autoTimer);
   if (id === null || id === 'ovPause') S.lastTick = performance.now();
   if (id !== null && id !== 'ovPause' && id !== 'ovWin' && id !== 'ovLoadMini') $('say').hidden = true;
   if (id !== null && id !== 'ovPause') TRK.forEach(function (t) { t.has = false; t.ptr = null; });
@@ -1727,7 +1799,7 @@ function startGood() {
   for (let k = 0; k < 14; k++) after(150 + k * 480, function () { fireworks(160 + Math.random() * 960, 110 + Math.random() * 320, cols[k % cols.length]); });
   after(6800, afterGood);   /* apresiasi dibuat panjang (6-7 detik) */
 }
-function afterGood() { if (S.mode === 'camera' && vid.readyState >= 2 && vid.videoWidth) startSelfie(); else startQuiz(); }
+function afterGood() { startQuiz(); }   /* revisi 14 Nov: foto hanya sekali, di akhir sesi (layar 7.jpg) */
 
 // 4. Selfie
 
@@ -1832,11 +1904,11 @@ function quizPick(k) {
   const z = S.quiz, now = performance.now(); if (!z || now < z.lock) return;
   const card = QUIZ_CARDS[k];
   if (z.cards[k] === z.targets[z.q]) {
-    z.lock = now + 5000; z.fb[k] = 1; sparkle(card.x + card.w / 2, card.y + card.h / 2, 16, ['#FFE066', '#FFFFFF', '#7BCB4F']); spawnConfetti(50, 'burst');
+    z.lock = now + 5000; z.fb[k] = 1; sfxCorrect(); sparkle(card.x + card.w / 2, card.y + card.h / 2, 16, ['#FFE066', '#FFFFFF', '#7BCB4F']); spawnConfetti(50, 'burst');
     popWord('quizWord', z.q + 1 >= z.targets.length ? 'HEBAT SEKALI!' : 'BETUL!');
     after(1500, function () { fireworks(card.x + card.w / 2, card.y + 40, '#FFD23C'); });
     after(3600, function () { popWord('quizWord', ''); z.q++; if (z.q >= z.targets.length) showFinal(); else quizSet(); });   /* jeda apresiasi sekitar 3,5 detik */
-  } else { z.fb[k] = -1; z.dw[k] = 0; z.hold[k] = true; z.lock = now + 1800; z.wrong = (z.wrong || 0) + 1; popWord('quizWord', 'COBA LAGI YA'); if (z.wrong >= 2) cheer('retry', 1); after(1700, function () { if (S.quiz === z && z.fb.every(function (f) { return f <= 0; })) popWord('quizWord', ''); }); }
+  } else { sfxWrong(); z.fb[k] = -1; z.dw[k] = 0; z.hold[k] = true; z.lock = now + 1800; z.wrong = (z.wrong || 0) + 1; popWord('quizWord', 'COBA LAGI YA'); if (z.wrong >= 2) cheer('retry', 1); after(1700, function () { if (S.quiz === z && z.fb.every(function (f) { return f <= 0; })) popWord('quizWord', ''); }); }
 }
 const QUIZ_PRESS = 1600;   /* sentuh kartu sebentar = ditekan lalu terpilih */
 const QUIZ_CARDS = [0, 1, 2].map(function (k) { return { x: 215 + k * 330, y: 235, w: 300, h: 290 }; });
@@ -1864,13 +1936,46 @@ function quizFrame(now) {
 }
 
 // 6. Penutup
-function showFinal() { const nm = LETTERS[S.idx][1]; $('winTitle').innerHTML = 'Aku Sudah<br>Belajar Aksara ' + cap(nm) + '!'; $('aliveG').textContent = LETTERS[S.idx][0]; $('winName').textContent = cap(nm); showOnly('ovWin'); spawnConfetti(70, 'rain'); spawnConfetti(30, 'burst'); after(600, function () { uiVoice(['b04_hebat_' + LETTERS[S.idx][1]]); }); scheduleAuto(); }
+function showFinal() {
+  const nm = LETTERS[S.idx][1]; $('winTitle').innerHTML = 'Aku Sudah<br>Belajar Aksara ' + cap(nm) + '!'; $('aliveG').textContent = LETTERS[S.idx][0]; $('winName').textContent = cap(nm);
+  showOnly('ovWin'); popWord('winWord', ''); spawnConfetti(70, 'rain'); spawnConfetti(30, 'burst'); after(600, function () { uiVoice(['b04_hebat_' + LETTERS[S.idx][1]]); });
+  if (camLive()) { $('cdFill').style.transition = 'none'; $('cdFill').style.width = '0%'; winPhoto(); } else scheduleAuto();
+}
+function camLive() { return S.mode === 'camera' && vid.readyState >= 2 && !!vid.videoWidth; }
+/* hitung mundur 3-2-1 lalu potret. tick(kata, n) dipanggil tiap langkah; selesai(url) sesudah potret */
+function countdownShot(wordId, guard, compose, done) {
+  const steps = [['SEDIA', 0, 1800], ['3', 2, 2800], ['2', 3, 3700], ['1', 4, 4600]];
+  steps.forEach(function (s) { setTimeout(function () { if (guard()) { popWord(wordId, s[0]); sfxTick(s[1]); } }, s[2]); });
+  setTimeout(function () {
+    if (!guard()) return; popWord(wordId, '');
+    const fl = $('camFlash'); fl.classList.remove('go'); void fl.offsetWidth; fl.classList.add('go'); sfxShutter();
+    const c = document.createElement('canvas'); c.width = W; c.height = H; const g = c.getContext('2d');
+    g.fillStyle = '#7ED957'; g.fillRect(0, 0, W, H); drawVideoFull(g); compose(g);
+    let url = ''; try { url = c.toDataURL('image/png'); } catch (e) { url = ''; }
+    S.shots = (S.shots || 0) + 1; done(url);
+  }, 5500);
+}
+function winPhoto() {
+  const id = S.stage;
+  countdownShot('winWord', function () { return S.stage === id && S.ui === 'ovWin'; }, drawWinPhoto, function (url) {
+    S.photoUrl = url; $('photoImg').src = url; showOnly('ovPhoto'); spawnConfetti(60, 'rain'); spawnConfetti(30, 'burst'); scheduleAuto();
+  });
+}
+function drawWinPhoto(g) {        /* isi foto = tampilan 7.jpg: bingkai, tokoh aksara, judul, logo */
+  const L = LETTERS[S.idx]; if (imgOk('win7')) g.drawImage(IMGS.win7, 0, 0, W, H);
+  const mk = drawMascot(g, L[0], 300, 640, 220, performance.now()); drawMascotSay(g, L, mk.cx, mk.top - 24);
+  g.save(); g.lineJoin = 'round'; g.textAlign = 'left'; g.textBaseline = 'top'; g.font = '700 48px Fredoka, sans-serif';
+  ['Aku Sudah', 'Belajar Aksara ' + cap(L[1]) + '!'].forEach(function (t, k) { g.lineWidth = 12; g.strokeStyle = '#fff'; g.strokeText(t, 128, 82 + k * 57); g.fillStyle = WOOD; g.fillText(t, 128, 82 + k * 57); });
+  rr(g, 913, 34, 215, 86, 26); g.fillStyle = '#FFE066'; g.fill(); g.fillStyle = WOOD; g.font = '700 28px Fredoka, sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('TAPAK AKSARA', 1020, 78);
+  g.restore();
+}
 $('btnLrnNext').addEventListener('click', function () { stopUiVoice(); startBubbles(); });
 $('btnBubGo').addEventListener('click', bubBegin);
-$('btnQuiz').addEventListener('click', startQuiz);
-$('btnPhotoHome').addEventListener('click', goHome);
+$('btnPhAgain').addEventListener('click', function () { clearTimeout(S.autoTimer); startGame(S.idx); });
+$('btnPhNext').addEventListener('click', goNext);
 $('btnChainHome').addEventListener('click', goHome);
-$('btnDown').addEventListener('click', function () { if (!S.photoUrl) return; const a = document.createElement('a'); a.href = S.photoUrl; a.download = 'selfie-aksara-' + LETTERS[S.idx][1] + '.png'; document.body.appendChild(a); a.click(); a.remove(); });
+function downloadPhoto(url, name) { if (!url) return; const a = document.createElement('a'); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove(); S.downloads = (S.downloads || 0) + 1; }
+$('btnDown').addEventListener('click', function () { downloadPhoto(S.photoUrl, 'foto-tapak-aksara-' + LETTERS[S.idx][1] + '.png'); });
 $('btnSkip').addEventListener('click', function () {
   if (S.ui === 'ovLearn') startBubbles();
   else if (S.ui === 'ovBub') { if (S.bub) S.bub.over = true; startGood(); }
@@ -2033,8 +2138,9 @@ var TapakMusik = (function () {
   var CUES = {
     'UI-M01': {f: 'menu/ui_m01'},   'UI-M02': {f: 'menu/ui_m02'},   'UI-M03': {f: 'menu/ui_m03'},
     'UI-M04': {f: 'menu/ui_m04', once: 1},
-    'BH-01': {f: 'byhuruf/bh_01'},  'BH-02': {f: 'byhuruf/bh_02'},  'BH-03': {f: 'byhuruf/bh_03'},
-    'BH-04': {f: 'byhuruf/bh_04', once: 1}, 'BH-05': {f: 'byhuruf/bh_05'},
+    /* revisi 14 Nov: sesi main By Huruf memakai gamelan dolanan sintetis (beda instrumen dari beranda). File lama bh_0x tetap ada. */
+    'BH-01': {f: 'byhuruf/dolanan_tulis'},  'BH-02': {f: 'byhuruf/bh_02'},  'BH-03': {f: 'byhuruf/dolanan_main'},
+    'BH-04': {f: 'byhuruf/dolanan_berhasil', once: 1}, 'BH-05': {f: 'byhuruf/dolanan_pulang'},
     'ST01': {f: 'story/st01', once: 1}, 'ST02': {f: 'story/st02'}, 'ST03': {f: 'story/st03'},
     'ST04': {f: 'story/st04'}, 'ST05': {f: 'story/st05'}, 'ST06': {f: 'story/st06'}, 'ST07': {f: 'story/st07'},
     'ST08': {f: 'story/st08'}, 'ST09': {f: 'story/st09', game: 1}, 'ST11': {f: 'story/st11'},
@@ -2050,9 +2156,9 @@ var TapakMusik = (function () {
     17: 'ST17', 18: 'ST18', 19: 'ST19', 20: 'ST20', 21: 'ST20', 22: 'ST22A', 23: 'ST23', 24: 'ST24', 25: 'ST25'};
   /* ketukan (detik) tiap cue, dari analisis tempo; dipakai untuk menunggu ketukan sebelum berganti */
   var BEAT = {gandrung: .6038, sasmita: .534, gemashanti: .6737, epicjava: .6967, symphony: .6737,
-    lukitasari: .6268, waditra: .6734, samapta: .4645};
+    lukitasari: .6268, waditra: .6734, samapta: .4645, dolanan_tulis: .66, dolanan_main: .5, dolanan_pulang: .72};
   var SRC = {'UI-M01': 'gandrung', 'UI-M02': 'sasmita', 'UI-M03': 'gandrung', 'UI-M04': 'gandrung',
-    'BH-01': 'gandrung', 'BH-02': 'gemashanti', 'BH-03': 'gandrung', 'BH-04': 'gandrung', 'BH-05': 'gandrung',
+    'BH-01': 'dolanan_tulis', 'BH-02': 'gemashanti', 'BH-03': 'dolanan_main', 'BH-04': 'dolanan_main', 'BH-05': 'dolanan_pulang',
     ST01: 'epicjava', ST02: 'symphony', ST03: 'gemashanti', ST04: 'lukitasari', ST05: 'waditra', ST06: 'lukitasari',
     ST07: 'sasmita', ST08: 'sasmita', ST09: 'samapta', ST11: 'symphony', ST12: 'sasmita', ST13: 'samapta',
     ST14: 'waditra', ST15: 'samapta', ST17: 'epicjava', ST18: 'lukitasari', ST19: 'gemashanti', ST20: 'symphony',
@@ -2298,7 +2404,7 @@ const STORY_DEFS = {
     over: '<div class="st46"><p id="st46a">Itulah kisah di balik Hanacaraka. Dari kisah inilah dua puluh aksara Jawa dikenal, dan sampai sekarang dipakai orang Jawa untuk menulis.</p><p id="st46b"><b>Amanat:</b> Kisah Dora dan Sembada mengajarkan kita tentang kesetiaan. Kita juga perlu saling mendengarkan, memahami pesan, dan bertanya ketika merasa ragu.</p></div>' },
   '47': { tag: 'PENUTUP', nocap: 1, img: 'st47', cam: stCam(1, 1.03, 0, 0, 0, 0, 50, 45), enter: { t: 'dissolve', d: 1.2 }, cue: 'ST25', lines: ['25_075_aji_saka'], tail: JEDA.ingat, fx: [['dust', 8]],
     over: '<div class="st47"><p>Terima kasih sudah bermain! Yuk, berpose bersama Aji Saka, Dora, dan Sembada!</p></div>', reveal: [['.st47 p', 0.4]] },
-  '48': { tag: 'PENUTUP', nocap: 1, img: 'close48', view: 1, cam: ST_STILL, enter: { t: 'dissolve', d: 1.0 }, cue: 'ST25', lines: ['25_076_aji_saka'], tail: 6,
+  '48': { tag: 'PENUTUP', nocap: 1, img: 'close48', view: 1, photo: 1, cam: ST_STILL, enter: { t: 'dissolve', d: 1.0 }, cue: 'ST25', lines: ['25_076_aji_saka'], tail: 6,
     over: '<div class="st48t"><b>Hore! Petualangan selesai!</b><b>Aku sudah belajar 20 aksara Jawa!</b></div><div class="st48l">TAPAK AKSARA</div><div class="st48b">Aku sudah mengikuti petualangan Aji Saka!</div><div class="st48n">Nyalakan kamera supaya kamu ikut tampil di sini.</div>', reveal: [['.st48t', 0.3], ['.st48l', 0.6], ['.st48b', 1.2]] },
   '49': { tag: 'GAPURA', img: 's40', cam: ST_STILL, enter: { t: 'dissolve', d: 1.0 }, cue: 'ST25', lines: ['25_077_narator'], tail: 1.4 }
 };
@@ -2493,6 +2599,8 @@ function stStep(now) {
   if (ST.playing && !ST.gate && !ST.ended) {
     let nc = Math.min(ST.TOTAL, ST.clock + dt); const ci = stPanelAt(ST.clock), cp = ST.P[ci], lim = ST.START[ci] + cp.dur - 0.002;
     if (cp.btn && !ST.gateDone[ci] && nc >= lim) { nc = lim; ST.gate = true; }
+    /* revisi 14 Nov: adegan 48 — foto bersama (hitung mundur, potret, unduh) bila kamera menyala */
+    if (cp.photo && !ST.gateDone[ci] && !ST.shot && camLive() && nc - ST.START[ci] >= cp.voiceEnd + 0.6) { ST.gate = true; stPhoto(ci); }
     ST.clock = nc;
   }
   stRender();
@@ -2571,6 +2679,27 @@ function stViewFrame(now) {
   else if (!p.bgDrawn) { p.bgDrawn = true; c.filter = 'blur(6px) brightness(1.05)'; if (imgOk('bg')) c.drawImage(IMGS.bg, -20, -20, W + 40, H + 40); else { c.fillStyle = '#E9D8BE'; c.fillRect(0, 0, W, H); } c.filter = 'none'; }
   drawParticles(); dwellStep(now); drawCursors();
 }
+function stPhoto(i) {
+  const run = ST.run, p = ST.P[i], el = ST.PEL[i]; ST.shot = { i: i };
+  countdownShot('stWord', function () { return ST.run === run && ST.shown === i && S.ui === 'ovStory'; }, function (g) { stDraw48(g, p); }, function (url) {
+    ST.shot.url = url;
+    const box = document.createElement('div'); box.className = 'st48shot';
+    box.innerHTML = '<img alt="Foto bersama Aji Saka, Dora, dan Sembada"><div class="st48row"><button class="bigbtn sm" type="button" data-a="down">Unduh foto</button><button class="bigbtn gold sm" type="button" data-a="go">Lanjut ›</button></div>';
+    box.querySelector('img').src = url; el.appendChild(box);
+    const go = function () { if (ST.run !== run || !ST.shot || ST.shot.done) return; ST.shot.done = true; clearTimeout(ST.shot.t); box.remove(); ST.gateDone[i] = true; ST.gate = false; ST.last = performance.now(); };
+    box.querySelector('[data-a="down"]').addEventListener('click', function () { downloadPhoto(url, 'foto-tapak-aksara-aji-saka.png'); });
+    box.querySelector('[data-a="go"]').addEventListener('click', go);
+    ST.shot.t = setTimeout(go, 25000);     /* tidak ada yang menekan: lanjut sendiri */
+  });
+}
+function stDraw48(g, p) {     /* isi foto = tampilan 48.jpg: bingkai + tulisan */
+  const im = p.camEl && p.camEl.querySelector('img.stbg'); if (im && im.complete && im.naturalWidth) g.drawImage(im, 0, 0, W, H);
+  g.save(); g.lineJoin = 'round'; g.textAlign = 'left'; g.textBaseline = 'top'; g.font = '700 46px Fredoka, sans-serif';
+  ['Hore! Petualangan selesai!', 'Aku sudah belajar 20 aksara Jawa!'].forEach(function (t, k) { g.lineWidth = 12; g.strokeStyle = '#fff'; g.strokeText(t, 115, 47 + k * 58); g.fillStyle = '#5E3519'; g.fillText(t, 115, 47 + k * 58); });
+  rr(g, 913, 68, 215, 90, 26); g.fillStyle = '#FFE066'; g.fill(); g.fillStyle = '#5E3519'; g.font = '700 28px Fredoka, sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('TAPAK AKSARA', 1020, 113);
+  g.font = '700 36px Fredoka, sans-serif'; g.textBaseline = 'bottom'; g.lineWidth = 10; g.strokeStyle = '#fff'; g.strokeText('Aku sudah mengikuti petualangan Aji Saka!', 640, 569); g.fillStyle = '#5E3519'; g.fillText('Aku sudah mengikuti petualangan Aji Saka!', 640, 569);
+  g.restore();
+}
 function stFinish() {
   if (ST.ended) return; ST.ended = true; ST.playing = false; stSetIcon(); stStopVoices(); MUS.vs = 0; $('ovStory').classList.remove('nocam');
   $('stBlack').style.opacity = 1;
@@ -2594,6 +2723,7 @@ function stPreload() {
 }
 function startStory(mode, done) {
   const run = ++ST.run;
+  ST.shot = null;
   ST.onDone = done || null; ST.ended = false; ST.started = false; ST.playing = false; ST.gate = false; ST.clock = 0; ST.shown = -1; ST.last = 0; ST.mode = mode;
   stopUiVoice(); S.ukMode = false; musGame(false);
   S.particles.length = 0; popWord('doneWord', '');
