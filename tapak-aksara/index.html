@@ -773,6 +773,9 @@ const BAKED = {"ha":[[0.1224,0.8783,0],[0.0599,0.558,0],[0.0859,0.201,0],[0.2526
 const ORDER_KEY = 'dolanGerak.nulisAksara.urutan.v1';
 /* versi game yang terbit: false. Editor urutan bintang (file terpisah, di luar web): true */
 const EDITOR_ONLY = /*__EDITOR_ONLY__*/false;
+/* revisi 14 Nov: suara orang di luar dongeng (menu M01-M04 & By Huruf B01-B05) dinonaktifkan dulu.
+   Ubah ke true untuk menyalakan lagi. Teks gelembung & alurnya tetap sama, hanya tanpa suara. */
+const GUIDE_VOICE = false;
 function loadOrders() { try { const o = JSON.parse(localStorage.getItem(ORDER_KEY) || 'null'); return o && typeof o === 'object' ? o : {}; } catch (e) { return {}; } }
 function saveOrders() { try { localStorage.setItem(ORDER_KEY, JSON.stringify(S.orders)); return true; } catch (e) { return false; } }
 function getOrder(name) { const o = S.orders[name] || BAKED[name]; return o && o.length >= 2 ? o : null; }
@@ -856,7 +859,7 @@ function say(text, o) {
   V.keys[key] = now; V.lastAt = now;
   V.log.push(text); if (V.log.length > 80) V.log.shift();
   if (o.bubble !== false) showBubble(text);
-  if (S.settings.voice) speakNow(o.spoken || text);
+  if (S.settings.voice && GUIDE_VOICE) speakNow(o.spoken || text);   /* suara robot pemandu: ikut dinonaktifkan */
   return true;
 }
 
@@ -1503,6 +1506,7 @@ function showOnly(id) {
   if (id === 'ovTitle' || id === 'ovSelect' || id === 'ovHow') { S.fromEdit = false; S.editing = false; }
   $('hEdBack').hidden = !S.fromEdit;
   $('hUkSkip').hidden = !(S.ukMode && id === null); ukSkipReset();
+  if (id !== null && id !== 'ovPause' && id !== 'ovSettings') popWord('doneWord', '');   /* "HEBAT!" jangan tertinggal di layar lain */
   stage.dataset.ui = String(id); S.stage++; $('btnSkip').hidden = $('btnChainHome').hidden = STAGE_IDS.indexOf(id) < 0;
   if (id !== 'ovWin') clearTimeout(S.autoTimer);
   if (id === null || id === 'ovPause') S.lastTick = performance.now();
@@ -2229,8 +2233,8 @@ function uiVoice(ids, done, onLine) {
   function next() {
     if (run !== UV.run) return;
     if (k >= ids.length) { MUS.vu = 0; UV.a = null; if (onLine) onLine(null); if (done) done(); return; }
-    const id = ids[k++], v = VOICE[id]; if (onLine) onLine(id);
-    if (!S.settings.voice) { MUS.vu = 0; setTimeout(next, Math.round(v[1] * 1000) + 250); return; }
+    const id = ids[k++], v = VOICE[id]; if (onLine) onLine(id); UV.cur = id;
+    if (!S.settings.voice || (!GUIDE_VOICE && /^(m0|b0)/.test(id))) { MUS.vu = 0; setTimeout(next, Math.round(v[1] * 1000) + 250); return; }
     const a = new Audio(voiceUrl(v[3])); UV.a = a; MUS.vu = 1;
     let fin = false; const end = function () { if (fin) return; fin = true; MUS.vu = 0; setTimeout(next, 300); };
     a.onended = end; a.onerror = function () { setTimeout(end, Math.round(v[1] * 1000)); };
