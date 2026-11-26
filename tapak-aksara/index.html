@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <script>/* pembaruan otomatis: cek version.txt di server; kalau versinya lebih baru dari halaman ini, muat ulang versi terbaru (tanpa Ctrl+Shift+R) */
-(function(){var B="20261115-183345-8d0949";if(location.protocol==="file:"||B.charAt(0)==="_")return;var u;try{u=new URL(location.href)}catch(e){return}
+(function(){var B="20261126-135515-8f7acd";if(location.protocol==="file:"||B.charAt(0)==="_")return;var u;try{u=new URL(location.href)}catch(e){return}
 fetch("version.txt?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(v){v=(v||"").trim();
 if(/^[0-9a-z-]{4,40}$/.test(v)&&v!==B&&u.searchParams.get("v")!==v){u.searchParams.set("v",v);location.replace(u.toString());}}).catch(function(){});})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -1649,7 +1649,7 @@ function showOnly(id) {
   if (id !== null && id !== 'ovPause') TRK.forEach(function (t) { t.has = false; t.ptr = null; });
   updateHud();
 }
-function titleVoice() { if (!MUS.ok || S.m01done || !S.settings.voice) return; S.m01done = true; uiVoice(['m01_000_narator', 'm01_001_aji_saka']); }
+function titleVoice() { /* beranda tanpa suara (permintaan Adiva 26 Nov): suara hanya di game dan dongeng */ }
 document.addEventListener('pointerdown', function () { if (!MUS.ok) { ac(); if (S.ui === 'ovTitle') titleVoice(); } }, true);
 function showError(msg, code) { stopCamera(); S.mode = null; $('errText').textContent = msg; $('errCode').textContent = code ? 'Kode teknis (untuk dilaporkan): ' + code : ''; showOnly('ovError'); }
 function stopCamera() { if (S.stream) { S.stream.getTracks().forEach(function (t) { t.stop(); }); S.stream = null; } vid.srcObject = null; TRK.forEach(function (t) { t.has = false; }); }
@@ -2162,8 +2162,8 @@ $('btnEditor').addEventListener('click', function () { openEditor(0); });
 
 // ===== Tombol =====
 function goHome() { stopSpeech(); stopCamera(); S.mode = null; S.done = false; S.ready = false; S.settingsFrom = null; $('say').hidden = true; showOnly('ovTitle'); }
-$('btnPlay').addEventListener('click', function () { ac(); buildGrid(); showOnly('ovSelect'); uiVoice(['m03_003_aji_saka']); });
-$('btnSettings').addEventListener('click', function () { ac(); syncSettings(); S.settingsFrom = 'ovTitle'; showOnly('ovSettings'); uiVoice(['m02_002_aji_saka']); });
+$('btnPlay').addEventListener('click', function () { ac(); buildGrid(); showOnly('ovSelect'); });
+$('btnSettings').addEventListener('click', function () { ac(); syncSettings(); S.settingsFrom = 'ovTitle'; showOnly('ovSettings'); });
 $('btnStory').addEventListener('click', function () { ac(); stopUiVoice(); startStory('main', startUkir); });
 $('btnQuit').addEventListener('click', function () {   /* revisi 14 Nov: website Dolanan belum ada -> cukup pesan, tidak pindah halaman */
   ac(); $('quitBox').hidden = false;
@@ -2431,7 +2431,7 @@ function uiVoice(ids, done, onLine) {
     if (run !== UV.run) return;
     if (k >= ids.length) { MUS.vu = 0; UV.a = null; if (onLine) onLine(null); if (done) done(); return; }
     const id = ids[k++], v = VOICE[id]; if (onLine) onLine(id); UV.cur = id;
-    if (!S.settings.voice || (!GUIDE_VOICE && /^(m0|b0)/.test(id))) { MUS.vu = 0; setTimeout(next, Math.round(v[1] * 1000) + 250); return; }
+    if (!S.settings.voice || /^(m0\d|b05)_/.test(id) || (!GUIDE_VOICE && /^(m0|b0)/.test(id))) { MUS.vu = 0; setTimeout(next, Math.round(v[1] * 1000) + 250); return; }
     const a = new Audio(voiceUrl(v[3])); UV.a = a; MUS.vu = 1;
     let fin = false; const end = function () { if (fin) return; fin = true; MUS.vu = 0; setTimeout(next, 300); };
     a.onended = end; a.onerror = function () { setTimeout(end, Math.round(v[1] * 1000)); };
@@ -2930,7 +2930,7 @@ function goGate() {
   showOnly('ovGate'); const im = $('gateImg'); im.classList.remove('go'); void im.offsetWidth; im.classList.add('go');
   const id = S.stage; let left = 2;
   const fin = function () { if (--left > 0 || S.stage !== id) return; $('ovGate').classList.add('out'); setTimeout(function () { if (S.stage !== id) return; $('ovGate').classList.remove('out'); buildGrid(); showOnly('ovSelect'); }, 700); };
-  uiVoice(['b05_011_narator'], function () { setTimeout(fin, 300); });
+  setTimeout(fin, 300);   /* gapura tanpa suara narator; kembali otomatis */
   setTimeout(fin, 4200);
 }
 
